@@ -5,7 +5,14 @@ import Vuetify from 'vuetify'
 import App from './App'
 import router from './router'
 
+import 'vue-awesome/icons/facebook'
+import 'vue-awesome/icons/google-plus'
+import Icon from 'vue-awesome/components/Icon'
+
 Vue.use(Vuetify)
+Vue.use(Icon)
+Vue.component('icon', Icon)
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
@@ -13,5 +20,7 @@ new Vue({
   el: '#app',
   router,
   template: '<App/>',
-  components: { App },
+  components: {
+    App,
+  },
 })
