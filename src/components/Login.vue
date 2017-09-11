@@ -1,5 +1,5 @@
 <template>
-  <v-layout v-if="user.id == null" column wrap class="text-xs-center">
+  <v-layout column wrap class="text-xs-center">
     <div class="logo">
       <img src="https://source.unsplash.com/random/256x256" />
     </div>
@@ -15,25 +15,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { mockLogin } from '@/utils'
 
 export default {
-  mounted() {
-    if (this.user.id != null) this.$router.push('/')
-  },
-
-  beforeUpdate() {
-    if (this.user.id != null) this.$router.push('/')
-  },
-
   data() {
     return {}
   },
-
-  computed: mapState({
-    user: state => state.user,
-  }),
 
   methods: {
     signInWithFacebook() {

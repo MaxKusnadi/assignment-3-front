@@ -1,14 +1,25 @@
 <template>
+  <login v-if="user.id == null" />
+  <div v-else>
+    <h1>Hello World</h1>
+  </div>
 </template>
 
 <script>
-export default {
-  mounted() {
-    if (this.$store.state.user.id == null) this.$router.push('/login')
-  },
+import { mapState } from 'vuex'
+import Login from '@/components/Login'
 
+export default {
   data() {
     return {}
+  },
+
+  computed: mapState({
+    user: state => state.user,
+  }),
+
+  components: {
+    Login,
   },
 }
 </script>

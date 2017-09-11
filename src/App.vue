@@ -14,7 +14,9 @@
     </v-toolbar>
     <main>
       <v-container fluid>
-        <router-view></router-view>
+        <v-slide-x-transition>
+          <router-view></router-view>
+        </v-slide-x-transition>
       </v-container>
     </main>
   </v-app>
