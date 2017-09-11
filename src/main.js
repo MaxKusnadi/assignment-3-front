@@ -2,8 +2,9 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import Vuetify from 'vuetify'
-import App from './App'
-import router from './router'
+import App from '@/App'
+import router from '@/router'
+import store from '@/store'
 
 import 'vue-awesome/icons/facebook'
 import 'vue-awesome/icons/google-plus'
@@ -19,6 +20,7 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: {
     App,

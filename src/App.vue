@@ -1,13 +1,12 @@
 <template>
   <v-app toolbar>
     <v-navigation-drawer
-      persistent
-      v-model="drawer"
-      light
-      enable-resize-watcher
       absolute
+      persistent
+      light
+      v-model="drawer"
+      enable-resize-watcher
     >
-      <v-list></v-list>
     </v-navigation-drawer>
     <v-toolbar fixed >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
@@ -22,12 +21,23 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { mockData } from '@/utils'
+
 export default {
+  mounted() {
+    mockData(this.$store)
+  },
+
   data() {
     return {
       drawer: true,
     }
   },
+
+  computed: mapState({
+    user: state => state.user,
+  }),
 }
 </script>
 
