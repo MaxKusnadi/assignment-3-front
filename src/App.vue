@@ -22,13 +22,8 @@
 
 <script>
 import { mapState } from 'vuex'
-import { mockData } from '@/utils'
 
 export default {
-  mounted() {
-    mockData(this.$store)
-  },
-
   data() {
     return {
       drawer: true,

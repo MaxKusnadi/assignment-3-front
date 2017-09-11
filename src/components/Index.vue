@@ -4,7 +4,7 @@
 <script>
 export default {
   mounted() {
-    this.$router.push('/login')
+    if (this.$store.state.user.id == null) this.$router.push('/login')
   },
 
   data() {

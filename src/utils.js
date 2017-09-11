@@ -1,4 +1,4 @@
-export function mockData(store) {
+export function mockLogin(store) {
   store.dispatch('initialiseUser', {
     id: '0',
     name: 'John Smith',

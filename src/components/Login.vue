@@ -1,13 +1,13 @@
 <template>
-  <v-layout column wrap class="text-xs-center">
+  <v-layout v-if="user.id == null" column wrap class="text-xs-center">
     <div class="logo">
       <img src="https://source.unsplash.com/random/256x256" />
     </div>
     <div>
-      <v-btn fab large class="facebook">
+      <v-btn fab large class="facebook" @click="signInWithFacebook">
         <icon name="facebook" scale="2"></icon>
       </v-btn>
-      <v-btn fab large class="google-plus">
+      <v-btn fab large class="google-plus" @click="signInWithGoogle">
         <icon name="google-plus" scale="2"></icon>
       </v-btn>
     </div>
@@ -15,9 +15,34 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { mockLogin } from '@/utils'
+
 export default {
+  mounted() {
+    if (this.user.id != null) this.$router.push('/')
+  },
+
+  beforeUpdate() {
+    if (this.user.id != null) this.$router.push('/')
+  },
+
   data() {
     return {}
+  },
+
+  computed: mapState({
+    user: state => state.user,
+  }),
+
+  methods: {
+    signInWithFacebook() {
+      mockLogin(this.$store)
+    },
+
+    signInWithGoogle() {
+      mockLogin(this.$store)
+    },
   },
 }
 </script>
