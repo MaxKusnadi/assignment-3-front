@@ -7,38 +7,19 @@
   <v-app toolbar v-else>
     <v-navigation-drawer
       absolute
-      persistent
+      temporary
       light
       v-model="drawer"
-      enable-resize-watcher
     >
-      <v-list dense>
-        <v-subheader class="mt-3 grey--text text--darken-1">GROUPS</v-subheader>
-        <v-list>
-          <v-list-tile v-for="group in Object.values(groups)" :key="group.id" avatar @click="$router.push(`/g/${group.id}`)">
-            <v-list-tile-avatar>
-              <img :src="`https://source.unsplash.com/${group.id}/256x256`" alt="">
-            </v-list-tile-avatar>
-            <v-list-tile-title v-text="group.name"></v-list-tile-title>
-          </v-list-tile>
-        </v-list>
-        <v-list-tile class="mt-3" @click="">
-          <v-list-tile-action>
-            <v-icon class="grey--text text--darken-1">add_circle_outline</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title class="grey--text text--darken-1">Create a Group</v-list-tile-title>
-        </v-list-tile>
-        <v-list-tile @click="">
-          <v-list-tile-action>
-            <v-icon class="grey--text text--darken-1">settings</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title class="grey--text text--darken-1">Settings</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
+      <group-list />
     </v-navigation-drawer>
-    <v-toolbar fixed >
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title><router-link to="/">Application</router-link></v-toolbar-title>
+    <v-toolbar fixed>
+      <v-toolbar-side-icon v-if="!canGoBack" @click.stop="drawer = !drawer">
+      </v-toolbar-side-icon>
+      <v-btn v-else icon class="hidden-xs-only" @click.stop="$router.push('/')">
+        <v-icon>arrow_back</v-icon>
+      </v-btn>
+      <v-toolbar-title>Application</v-toolbar-title>
     </v-toolbar>
     <main>
       <transition :name="transitionName">
@@ -51,11 +32,13 @@
 <script>
 import { mapState } from 'vuex'
 import Login from '@/components/Login'
+import GroupList from '@/components/GroupList'
 
 export default {
   data() {
     return {
-      drawer: true,
+      canGoBack: this.$router.currentRoute.path.split('/').length > 2,
+      drawer: false,
       transitionName: 'slide-left',
     }
   },
@@ -63,19 +46,21 @@ export default {
   props: ['title'],
 
   computed: {
-    ...mapState(['user', 'groups']),
+    ...mapState(['user']),
   },
 
   watch: {
     $route(to, from) {
       const toDepth = to.path.split('/').length
       const fromDepth = from.path.split('/').length
+      this.canGoBack = toDepth > 2
       this.transitionName = toDepth < fromDepth ? 'back' : 'forward'
     },
   },
 
   components: {
     Login,
+    GroupList,
   },
 }
 </script>
