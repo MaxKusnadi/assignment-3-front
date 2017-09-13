@@ -1,8 +1,8 @@
 <template>
-  <v-container fluid>
+  <v-container grid-list-md fluid>
     <v-list two-line subheader>
       <v-subheader>Upcoming</v-subheader>
-      <v-list-tile v-for="event in group.upcomingEvents">
+      <v-list-tile v-for="event in upcomingEvents">
         <v-list-tile-content>
           <v-list-tile-title v-text="event.name"></v-list-tile-title>
           <v-list-tile-sub-title v-text="moment(event.dateTime).format('dddd, DD MMMM')"></v-list-tile-sub-title>
@@ -12,7 +12,7 @@
     <v-divider></v-divider>
     <v-list two-line subheader>
       <v-subheader>Completed</v-subheader>
-      <v-list-tile v-for="event in group.completedEvents">
+      <v-list-tile v-for="event in completedEvents">
         <v-list-tile-content>
           <v-list-tile-title v-text="event.name"></v-list-tile-title>
           <v-list-tile-sub-title v-text="moment(event.dateTime).format('dddd, DD MMMM')"></v-list-tile-sub-title>
@@ -34,11 +34,15 @@ export default {
 
   computed: {
     group: function() {
-      const group = this.$store.getters.activeGroup(this.groupId)
+      return this.$store.getters.activeGroup(this.groupId)
+    },
+    upcomingEvents: function() {
       const now = Date.now()
-      group.upcomingEvents = group.events.filter(event => event.dateTime >= now)
-      group.completedEvents = group.events.filter(event => event.dateTime < now)
-      return group
+      return this.group.events.filter(event => event.dateTime >= now)
+    },
+    completedEvents: function() {
+      const now = Date.now()
+      return this.group.events.filter(event => event.dateTime < now)
     },
   },
 

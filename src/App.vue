@@ -41,11 +41,9 @@
       <v-toolbar-title><router-link to="/">Application</router-link></v-toolbar-title>
     </v-toolbar>
     <main>
-      <v-container fluid class="router-container">
-        <transition :name="transitionName">
-          <router-view class="router-view"></router-view>
-        </transition>
-      </v-container>
+      <transition :name="transitionName">
+        <router-view class="router-view"></router-view>
+      </transition>
     </main>
   </v-app>
 </template>
