@@ -9,7 +9,7 @@
         <v-list-tile-title v-text="group.name"></v-list-tile-title>
       </v-list-tile>
     </v-list>
-    <v-list-tile class="mt-3" @click="">
+    <v-list-tile class="mt-3" @click="$router.push('/createGroup')">
       <v-list-tile-action>
         <v-icon class="grey--text text--darken-1">add_circle_outline</v-icon>
       </v-list-tile-action>

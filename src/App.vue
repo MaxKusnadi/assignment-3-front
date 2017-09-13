@@ -16,7 +16,7 @@
     <v-toolbar fixed>
       <v-toolbar-side-icon v-if="!canGoBack" @click.stop="drawer = !drawer">
       </v-toolbar-side-icon>
-      <v-btn v-else icon class="hidden-xs-only" @click.stop="$router.push('/')">
+      <v-btn v-else icon @click.stop="$router.push('/')">
         <v-icon>arrow_back</v-icon>
       </v-btn>
       <v-toolbar-title>Application</v-toolbar-title>
@@ -37,7 +37,7 @@ import GroupList from '@/components/GroupList'
 export default {
   data() {
     return {
-      canGoBack: this.$router.currentRoute.path.split('/').length > 2,
+      canGoBack: this.$router.currentRoute.path !== '/',
       drawer: false,
       transitionName: 'slide-left',
     }
@@ -53,7 +53,7 @@ export default {
     $route(to, from) {
       const toDepth = to.path.split('/').length
       const fromDepth = from.path.split('/').length
-      this.canGoBack = toDepth > 2
+      this.canGoBack = to.path !== '/'
       this.transitionName = toDepth < fromDepth ? 'back' : 'forward'
     },
   },
@@ -68,8 +68,11 @@ export default {
 <style lang="stylus">
 @import './stylus/main'
 
+.container
+  padding: 0
+
 .router-view
-  position: absolute;
+  position: absolute
 
 .forward-enter-active, .back-enter-active
   transition: all 0.25s ease-out

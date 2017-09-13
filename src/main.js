@@ -9,6 +9,7 @@ import store from '@/store'
 import 'vue-awesome/icons/facebook'
 import 'vue-awesome/icons/google-plus'
 import 'vue-awesome/icons/plus'
+import 'vue-awesome/icons/check'
 import Icon from 'vue-awesome/components/Icon'
 
 Vue.use(Vuetify)

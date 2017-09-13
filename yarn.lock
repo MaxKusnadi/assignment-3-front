@@ -5253,6 +5253,10 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-avatar-cropper@^0.0.14:
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/vue-avatar-cropper/-/vue-avatar-cropper-0.0.14.tgz#001f3dd18474405aa8c33e498cbbb67be0915ad1"
+
 vue-awesome@^2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/vue-awesome/-/vue-awesome-2.3.3.tgz#e83f976fe5c7f86d207c24ca33731bdc6e9906a9"

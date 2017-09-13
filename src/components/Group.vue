@@ -1,5 +1,5 @@
 <template>
-  <v-container grid-list-md fluid>
+  <v-container fluid>
     <v-list two-line subheader>
       <v-subheader>Upcoming</v-subheader>
       <v-list-tile v-for="event in upcomingEvents">
