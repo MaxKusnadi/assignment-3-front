@@ -19,6 +19,11 @@
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
+    <div class="button-wrapper">
+      <v-btn absolute fab top right>
+        <icon name="plus"></icon>
+      </v-btn>
+    </div>
   </v-container>
 </template>
 
@@ -55,4 +60,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.button-wrapper
+  position: relative
 </style>
