@@ -10,7 +10,24 @@ export function mockLogin(store) {
         id: 'a',
         name: 'My First Group',
         photoUrl: '',
-        events: [],
+        events: [
+          {
+            name: 'Training',
+            dateTime: 1505591445276,
+          },
+          {
+            name: 'Training',
+            dateTime: 1505291445276,
+          },
+          {
+            name: 'Training',
+            dateTime: 1505391445276,
+          },
+          {
+            name: 'Another Training',
+            dateTime: 1505091445276,
+          },
+        ],
         members: [],
         owner: '0',
       },
