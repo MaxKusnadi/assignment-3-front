@@ -7,7 +7,7 @@ export function mockLogin(store) {
   store.dispatch('initialiseGroupList', {
     groups: [
       {
-        id: '0',
+        id: 'a',
         name: 'My First Group',
         photoUrl: '',
         events: [],

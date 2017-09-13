@@ -1,2 +1,2 @@
-export const activeGroup = state =>
-  Object.values(state.groups).find(group => group.id === state.activeGroupId)
+export const activeGroup = state => id =>
+  Object.values(state.groups).find(group => group.id === id)
