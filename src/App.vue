@@ -1,5 +1,14 @@
 <template>
-  <v-app toolbar>
+  <v-fade-transition v-if="user.id == null">
+    <v-app>
+      <main>
+        <v-container fluid>
+          <login />
+        </v-container>
+      </main>
+    </v-app>
+  </v-fade-transition>
+  <v-app toolbar v-else>
     <v-navigation-drawer
       absolute
       persistent
@@ -24,6 +33,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import Login from '@/components/Login'
 
 export default {
   data() {
@@ -35,6 +45,10 @@ export default {
   computed: mapState({
     user: state => state.user,
   }),
+
+  components: {
+    Login,
+  },
 }
 </script>
 
