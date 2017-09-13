@@ -1,11 +1,7 @@
 <template>
   <v-fade-transition v-if="user.id == null">
     <v-app>
-      <main>
-        <v-container fluid>
-          <login />
-        </v-container>
-      </main>
+      <login />
     </v-app>
   </v-fade-transition>
   <v-app toolbar v-else>
