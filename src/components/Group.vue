@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-list two-line subheader>
       <v-subheader>Upcoming</v-subheader>
-      <v-list-tile v-for="event in upcomingEvents">
+      <v-list-tile v-for="event in upcomingEvents" :key="event.id" @click="$router.push(`/g/${groupId}/${event.id}/`)">
         <v-list-tile-content>
           <v-list-tile-title v-text="event.name"></v-list-tile-title>
           <v-list-tile-sub-title v-text="moment(event.dateTime).format('dddd, DD MMMM')"></v-list-tile-sub-title>
@@ -12,7 +12,7 @@
     <v-divider></v-divider>
     <v-list two-line subheader>
       <v-subheader>Completed</v-subheader>
-      <v-list-tile v-for="event in completedEvents">
+      <v-list-tile v-for="event in completedEvents" :key="event.id" @click="$router.push(`/g/${groupId}/${event.id}/`)">
         <v-list-tile-content>
           <v-list-tile-title v-text="event.name"></v-list-tile-title>
           <v-list-tile-sub-title v-text="moment(event.dateTime).format('dddd, DD MMMM')"></v-list-tile-sub-title>
@@ -20,7 +20,7 @@
       </v-list-tile>
     </v-list>
     <div class="button-wrapper">
-      <v-btn absolute fab top right>
+      <v-btn absolute fab top right @click="$router.push(`/g/${groupId}/createEvent/`)">
         <icon name="plus"></icon>
       </v-btn>
     </div>
