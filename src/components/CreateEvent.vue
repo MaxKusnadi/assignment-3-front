@@ -113,6 +113,7 @@
             <v-text-field
               label="Location"
               v-model="location"
+              prepend-icon="location_on"
               :counter="true"
             ></v-text-field>
           </v-flex>
@@ -135,7 +136,6 @@
           </v-flex>
         </v-layout>
         </v-container>
-        
       </div>
       <div class="button-wrapper">
         <v-btn absolute fab top right dark class="green" @click="$router.go(-1)">

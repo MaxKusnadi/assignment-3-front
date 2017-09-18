@@ -47,29 +47,47 @@
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
-    <v-list v-if="admin">
-          <v-list-group v-for="item in items" v-bind:key="item.title">
-            <v-list-tile slot="item" @click="">
-              <v-list-tile-action>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-              </v-list-tile-content>
-              <v-list-tile-action>
-                <v-icon>keyboard_arrow_down</v-icon>
-              </v-list-tile-action>
-            </v-list-tile>
-            <v-list-tile v-for="member in item.members" v-bind:key="member.name" @click="">
-              <v-list-tile-avatar>
-                  <img :src="`https://source.unsplash.com/a/256x256`" alt="">
-                </v-list-tile-avatar>
-              <v-list-tile-content>
-                <v-list-tile-title>{{ member.name }}</v-list-tile-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list-group>
-        </v-list>
+    <div v-if='admin'>
+      <v-list>
+        <v-list-group v-for="item in items" v-bind:key="item.title">
+          <v-list-tile slot="item" @click="">
+            <v-list-tile-action>
+              <v-icon class="indigo--text">{{ item.icon }}</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            </v-list-tile-content>
+            <v-list-tile-action>
+              <v-icon>keyboard_arrow_down</v-icon>
+            </v-list-tile-action>
+          </v-list-tile>
+          <v-list-tile v-for="member in item.members" v-bind:key="member.name" @click="">
+            <v-list-tile-avatar>
+                <img :src="`https://source.unsplash.com/a/256x256`" alt="">
+              </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>{{groupId}}groupid:{{eventId}}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list-group>
+      </v-list>
+      <v-dialog v-model="dialog" persistent>
+        <v-btn primary dark large slot="activator" class="attendance">Take Attendance</v-btn>
+        <v-card>
+          
+          <v-card-text>
+            <v-text-field v-model="vcode" label="Create verification code"></v-text-field>
+            <small>*Participants have to key in this code to indicate attendance</small>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
+            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div> 
+      
     <div class="buttons" v-else>
             <v-btn primary dark large class="button">Going</v-btn>
             <v-btn error dark large class="button">Not Going</v-btn>
@@ -82,6 +100,8 @@ export default {
   data() {
     return {
       admin: true,
+      dialog: false,
+      vcode: null,
       items: [
         {
           icon: 'mood',
@@ -97,7 +117,7 @@ export default {
     }
   },
 
-  props: ['eventId'],
+  props: ['groupId', 'eventId'],
 
   computed: {
     event: function() {
@@ -140,6 +160,12 @@ export default {
 
 .button
   width: 40%
+
+.attendance
+  position: fixed
+  bottom: 0px
+  width: 100%
+  margin: 0
 </style>
 
 <style lang="stylus">
