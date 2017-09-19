@@ -2,7 +2,11 @@
 </template>
 
 <script>
-export default {}
+export default {
+  mounted() {
+    this.$store.dispatch('fetchGroups')
+  },
+}
 </script>
 
 <style lang="stylus" scoped>

@@ -97,6 +97,10 @@
 
 <script>
 export default {
+  mounted() {
+    this.$store.dispatch('fetchEvent', { eventId: this.eventId })
+  },
+
   data() {
     return {
       admin: true,

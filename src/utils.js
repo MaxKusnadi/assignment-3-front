@@ -1,10 +1,11 @@
 export function mockLogin(store) {
-  store.dispatch('initialiseUser', {
-    id: '0',
-    name: 'John Smith',
-    photoUrl: '',
+  store.commit('setUser', {
+    first_name: 'John',
+    last_name: 'Smith',
+    email: 'johnsmith@email.com',
+    fb_id: 0,
   })
-  store.dispatch('initialiseGroupList', {
+  store.commit('populateGroupList', {
     groups: [
       {
         id: 'a',

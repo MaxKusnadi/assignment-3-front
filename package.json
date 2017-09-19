@@ -12,13 +12,15 @@
     "lint-fix": "eslint --ext .js,.vue src --fix"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "moment": "^2.18.1",
     "vue": "^2.3.3",
     "vue-avatar-cropper": "^0.0.14",
     "vue-awesome": "^2.3.3",
     "vue-router": "^2.3.1",
     "vuetify": "^0.14.11",
-    "vuex": "^2.4.0"
+    "vuex": "^2.4.0",
+    "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

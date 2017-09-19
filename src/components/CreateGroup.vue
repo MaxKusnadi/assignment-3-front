@@ -44,6 +44,11 @@ export default {
       console.log(res)
     },
     submit() {
+      this.$store.dispatch('createGroup', {
+        name: this.name,
+        description: null,
+        picUrl: null,
+      })
       this.$router.push('/')
     },
   },

@@ -31,6 +31,10 @@
 import moment from 'moment'
 
 export default {
+  mounted() {
+    this.$store.dispatch('fetchEvents', { groupId: this.groupId })
+  },
+
   data() {
     return {}
   },
