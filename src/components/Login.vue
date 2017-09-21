@@ -6,32 +6,48 @@
         <img src="/" />
       </div>
       <div>
-        <v-btn fab large class="facebook" @click="signInWithFacebook">
-          <icon name="facebook" scale="2"></icon>
-        </v-btn>
-        <v-btn fab large class="google-plus" @click="signInWithGoogle">
-          <icon name="google-plus" scale="2"></icon>
-        </v-btn>
+        <fb-signin-button
+          :params="fbSignInParams"
+          @success="onSignInSuccess"
+          @error="onSignInError">
+          <v-btn fab large class="facebook">
+            <icon name="facebook" scale="2"></icon>
+          </v-btn>
+        </fb-signin-button>
       </div>
     </v-layout>
   </div>
 </template>
 
 <script>
-import { mockLogin } from '@/utils'
-
 export default {
   data() {
-    return {}
+    return {
+      fbSignInParams: {
+        scope: 'email',
+        return_scopes: true,
+      },
+    }
   },
 
   methods: {
-    signInWithFacebook() {
-      mockLogin(this.$store)
+    onSignInSuccess(res) {
+      FB.api(
+        '/me',
+        { fields: ['id', 'first_name', 'last_name', 'email'] },
+        me => {
+          this.$store.dispatch('login', {
+            accessToken: res.authResponse.accessToken,
+            fbId: me.id,
+            firstName: me.first_name,
+            lastName: me.last_name,
+            email: me.email,
+          })
+        }
+      )
     },
-
-    signInWithGoogle() {
-      mockLogin(this.$store)
+    onSignInError(err) {
+      console.log(err)
     },
   },
 }

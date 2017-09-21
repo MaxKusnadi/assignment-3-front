@@ -1,5 +1,5 @@
 <template>
-  <v-fade-transition v-if="user.fb_id == null">
+  <v-fade-transition v-if="user.fbId == null">
     <v-app>
       <login />
     </v-app>

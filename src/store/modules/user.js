@@ -1,40 +1,33 @@
-import { API_PATH } from '@/constants'
+import { api } from '@/utils'
 
 const state = {
-  first_name: null,
-  last_name: null,
+  firstName: null,
+  lastName: null,
   email: null,
-  fb_id: null,
+  fbId: null,
 }
 
 const getters = {}
 
 const actions = {
-  async login({ commit }) {
-    try {
-      const {
-        first_name,
-        last_name,
-        email,
-        fb_id,
-      } = await fetch(`${API_PATH}/me`, {
-        credentials: 'same-origin',
-      }).then(res => res.json())
+  async login({ commit }, { accessToken, fbId, firstName, lastName, email }) {
+    await api('get', '/login', {
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      fb_id: fbId,
+      access_token: accessToken,
+    })
 
-      return commit('setUser', { first_name, last_name, email, fb_id })
-    } catch (e) {
-      console.log(e)
-    }
+    commit('setUser', { firstName, lastName, email, fbId })
   },
 }
-
 const mutations = {
-  setUser(state, { first_name, last_name, email, fb_id }) {
-    /* eslint-disable camelcase */
-    state.first_name = first_name
-    state.last_name = last_name
+  setUser(state, { firstName, lastName, email, fbId }) {
+    state.firstName = firstName
+    state.lastName = lastName
     state.email = email
-    state.fb_id = fb_id
+    state.fbId = fbId
   },
 }
 
