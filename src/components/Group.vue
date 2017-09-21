@@ -32,6 +32,9 @@ import moment from 'moment'
 
 export default {
   mounted() {
+    // TODO: prompt if want to join first
+    this.$store.dispatch('joinGroup', { groupId: this.groupId })
+
     this.$store.dispatch('fetchEvents', { groupId: this.groupId })
   },
 
@@ -43,15 +46,23 @@ export default {
 
   computed: {
     group: function() {
-      return this.$store.getters.activeGroup(this.groupId)
+      return this.$store.state.groups[this.groupId]
     },
     upcomingEvents: function() {
+      if (this.group.events == null) return []
+
       const now = Date.now()
-      return this.group.events.filter(event => event.dateTime >= now)
+      return Object.values(this.group.events).filter(
+        event => event.dateTime >= now
+      )
     },
     completedEvents: function() {
+      if (this.group.events == null) return []
+
       const now = Date.now()
-      return this.group.events.filter(event => event.dateTime < now)
+      return Object.values(this.group.events).filter(
+        event => event.dateTime < now
+      )
     },
   },
 

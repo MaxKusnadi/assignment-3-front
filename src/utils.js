@@ -1,7 +1,11 @@
 import { API_PATH } from '@/constants'
 
-export async function api(method = 'get', path, body) {
-  const options = { method, credentials: 'same-origin' }
+export async function api(method = 'get', path, body, json = true) {
+  const options = { method, credentials: 'include' }
+
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`${method.toUpperCase()} ${path}\n${JSON.stringify(body)}`)
+  }
 
   if (body != null) {
     if (method === 'get') {
@@ -22,12 +26,20 @@ export async function api(method = 'get', path, body) {
     switch (res.status) {
       case 400:
         throw new Error(res.text)
+      case 401:
+        console.log('Unauthorized')
+        break
+      case 500:
+        console.log('Internal Server Error')
+        break
       default:
         throw new Error(res.statusText)
     }
   }
 
-  return res.json()
+  if (json) {
+    return res.json()
+  }
 }
 
 export function mockLogin(store) {

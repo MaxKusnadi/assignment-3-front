@@ -12,14 +12,19 @@ const actions = {
 
   async fetchGroups({ commit }) {
     // Fetch all groups
-    const { groups } = await api('get', '/me/group')
+    const groupIds = await api('get', '/me/group')
 
     // Fetch group info
-    const groupList = await Promise.all(
-      groups.map(group => api('get', '/group', { group_id: group.group_id }))
+    const groupInfos = await Promise.all(
+      groupIds.map(group => api('get', '/group', { group_id: group.group_id }))
     )
 
-    commit('setGroupList', { groupList })
+    const groups = groupInfos.map((info, i) => ({
+      groupId: groupIds[i].group_id,
+      ...info,
+    }))
+
+    commit('setGroupList', { groups })
   },
   async joinGroup({ commit }, { groupId }) {
     // Join group
@@ -28,7 +33,7 @@ const actions = {
     // Fetch group info
     const group = await api('get', '/group', { group_id: groupId })
 
-    commit('setGroup', { group })
+    commit('setGroup', { groupId, group })
   },
   leaveGroup({ commit }, { groupId }) {
     // Leave group
@@ -47,7 +52,7 @@ const actions = {
     // Fetch group info
     const group = await api('get', '/group', { group_id })
 
-    commit('setGroup', { group })
+    commit('setGroup', { groupId: group_id, group })
   },
   deleteGroup({ commit }, { groupId }) {
     // TODO: check if user is owner of group
@@ -64,14 +69,21 @@ const actions = {
 
   async fetchEvents({ commit }, { groupId }) {
     // Fetch events in group
-    const { events } = await api('get', '/event/group', { group_id: groupId })
+    const eventIds = await api('get', '/group/event', { group_id: groupId })
 
     // Fetch event info
-    const eventList = await Promise.all(
-      events.map(event => api('get', '/event', { event_id: event.event_id }))
+    const eventInfos = await Promise.all(
+      eventIds.map(event => api('get', '/event', { event_id: event.event_id }))
     )
 
-    return commit('setGroupEvents', { groupId, eventList })
+    const events = eventInfos.map((info, i) => ({
+      id: eventIds[i].event_id,
+      ...info,
+    }))
+
+    console.log(events)
+
+    return commit('setGroupEvents', { groupId, events })
   },
   async fetchEvent({ commit }, { groupId, eventId }) {
     // Fetch event attendance
@@ -88,11 +100,13 @@ const actions = {
 const mutations = {
   setGroupList(state, { groups }) {
     // group: { text, name, pic_url, description }
-    groups.forEach(group => Vue.set(state, group.id, group))
+    groups.forEach(group => Vue.set(state, group.groupId, group))
   },
   setGroupEvents(state, { groupId, events }) {
     // event: { start_date, end_date, description, location }
-    events.forEach(event => Vue.set(state[groupId], event.id, event))
+    const eventMap = {}
+    events.forEach(event => (eventMap[event.id] = event))
+    Vue.set(state[groupId], events, eventMap)
   },
   setEventAttendance(state, { groupId, eventId, users }) {
     // users: [{ user_id, status }]
@@ -101,10 +115,12 @@ const mutations = {
   },
   setGroup(state, { groupId, group }) {
     // group: { text, name, pic_url, description }
-    Vue.set(state.groups, groupId, { ...state.groups[groupId], ...group })
+    group.groupId = groupId
+    group.events = state[groupId] != null ? state[groupId].events : {}
+    Vue.set(state, groupId, group)
   },
   removeGroup(state, { groupId }) {
-    delete state.groups[groupId]
+    delete state[groupId]
   },
 }
 

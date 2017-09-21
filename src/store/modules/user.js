@@ -11,13 +11,15 @@ const getters = {}
 
 const actions = {
   async login({ commit }, { accessToken, fbId, firstName, lastName, email }) {
-    await api('get', '/login', {
+    const payload = {
       first_name: firstName,
       last_name: lastName,
       email,
       fb_id: fbId,
-      access_token: accessToken,
-    })
+      user_access_token: accessToken,
+    }
+
+    await api('get', '/login', payload, false)
 
     commit('setUser', { firstName, lastName, email, fbId })
   },

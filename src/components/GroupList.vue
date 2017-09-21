@@ -2,9 +2,9 @@
   <v-list dense>
     <v-subheader class="mt-3 grey--text text--darken-1">GROUPS</v-subheader>
     <v-list>
-      <v-list-tile v-for="group in Object.values(groups)" :key="group.id" avatar @click="$router.push(`/g/${group.id}/`)">
+      <v-list-tile v-for="group in Object.values(groups)" :key="group.groupId" avatar @click="$router.push(`/g/${group.groupId}/`)">
         <v-list-tile-avatar>
-          <img :src="`https://source.unsplash.com/${group.id}/256x256`" alt="">
+          <img :src="`https://source.unsplash.com/${group.groupId}/256x256`" alt="">
         </v-list-tile-avatar>
         <v-list-tile-title v-text="group.name"></v-list-tile-title>
       </v-list-tile>
