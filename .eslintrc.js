@@ -22,7 +22,7 @@ module.exports = {
   ],
   // add your custom rules here
   'rules': {
-    'prettier/prettier': ['error', {
+    'prettier/prettier': [process.env.NODE_ENV === 'production' ? 'error' : 'warn', {
       'semi': false,
       'singleQuote': true,
       'trailingComma': 'es5',
