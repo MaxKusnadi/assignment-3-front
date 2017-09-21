@@ -1,3 +1,35 @@
+import { API_PATH } from '@/constants'
+
+export async function api(method = 'get', path, body) {
+  const options = { method, credentials: 'same-origin' }
+
+  if (body != null) {
+    if (method === 'get') {
+      const params = Object.entries(body).reduce(
+        (accum, [key, value]) => `${accum}${key}=${encodeURIComponent(value)}&`,
+        '?'
+      )
+      path += params
+    } else {
+      options.headers = { 'Content-Type': 'application/json' }
+      options.body = JSON.stringify(body)
+    }
+  }
+
+  const res = await fetch(`${API_PATH}${path}`, options)
+
+  if (!res.ok) {
+    switch (res.status) {
+      case 400:
+        throw new Error(res.text)
+      default:
+        throw new Error(res.statusText)
+    }
+  }
+
+  return res.json()
+}
+
 export function mockLogin(store) {
   store.commit('setUser', {
     first_name: 'John',
@@ -5,7 +37,7 @@ export function mockLogin(store) {
     email: 'johnsmith@email.com',
     fb_id: 0,
   })
-  store.commit('populateGroupList', {
+  store.commit('setGroupList', {
     groups: [
       {
         id: 'a',

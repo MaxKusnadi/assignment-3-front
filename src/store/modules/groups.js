@@ -1,124 +1,110 @@
 import Vue from 'vue'
-import { API_PATH } from '@/constants'
+import { api } from '@/utils'
 
 const state = {}
 
 const getters = {}
 
 const actions = {
+  /*
+   * Groups
+   */
+
   async fetchGroups({ commit }) {
-    try {
-      const { groups } = await fetch(`${API_PATH}/me/group`, {
-        credentials: 'same-origin',
-      }).then(res => res.json())
+    // Fetch all groups
+    const { groups } = await api('get', '/me/group')
 
-      const groupList = await Promise.all(
-        groups.map(group =>
-          fetch(`${API_PATH}/group?group_id=${group.group_id}`, {
-            credentials: 'same-origin',
-          }).then(res => res.json())
-        )
-      )
+    // Fetch group info
+    const groupList = await Promise.all(
+      groups.map(group => api('get', '/group', { group_id: group.group_id }))
+    )
 
-      return commit('populateGroupList', groupList)
-    } catch (e) {
-      console.log(e)
-    }
+    commit('setGroupList', { groupList })
   },
-  joinGroup({ commit }, { groupId }) {
-    fetch(`${API_PATH}/me/group`, {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ group_id: groupId }),
-      credentials: 'same-origin',
-    })
-    // TODO: fetch group details and update state
+  async joinGroup({ commit }, { groupId }) {
+    // Join group
+    api('post', '/me/group', { group_id: groupId })
+
+    // Fetch group info
+    const group = await api('get', '/group', { group_id: groupId })
+
+    commit('setGroup', { group })
   },
   leaveGroup({ commit }, { groupId }) {
-    fetch(`${API_PATH}/me/group`, {
-      method: 'delete',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ group_id: groupId }),
-      credentials: 'same-origin',
-    })
-    // TODO: remove group from state
+    // Leave group
+    api('delete', '/me/group', { group_id: groupId })
+
+    commit('removeGroup', { groupId })
   },
-  createGroup({ commit }, { name, description, picUrl }) {
-    fetch(`${API_PATH}/group`, {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, description, pic_url: picUrl }),
-      credentials: 'same-origin',
+  async createGroup({ commit }, { name, description, picUrl }) {
+    // Create group
+    const { group_id } = await api('post', '/group', {
+      name,
+      description,
+      pic_url: picUrl,
     })
-    // TODO: fetch group details and update state
+
+    // Fetch group info
+    const group = await api('get', '/group', { group_id })
+
+    commit('setGroup', { group })
   },
   deleteGroup({ commit }, { groupId }) {
     // TODO: check if user is owner of group
-    fetch(`${API_PATH}/group`, {
-      method: 'delete',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ group_id: groupId }),
-      credentials: 'same-origin',
-    })
-    // TODO: fetch group details and update state
+
+    // Delete group
+    api('delete', '/group', { group_id: groupId })
+
+    commit('removeGroup', { groupId })
   },
 
-  // Events
+  /*
+   * Events
+   */
 
   async fetchEvents({ commit }, { groupId }) {
-    try {
-      const {
-        events,
-      } = await fetch(`${API_PATH}/event/group?group_id=${groupId}`, {
-        credentials: 'same-origin',
-      }).then(res => res.json())
+    // Fetch events in group
+    const { events } = await api('get', '/event/group', { group_id: groupId })
 
-      const eventList = await Promise.all(
-        events.map(event =>
-          fetch(`${API_PATH}/event`, {
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ event_id: event.event_id }),
-            credentials: 'same-origin',
-          }).then(res => res.json())
-        )
-      )
+    // Fetch event info
+    const eventList = await Promise.all(
+      events.map(event => api('get', '/event', { event_id: event.event_id }))
+    )
 
-      return commit('populateGroupEvents', { groupId, eventList })
-    } catch (e) {
-      console.log(e)
-    }
+    return commit('setGroupEvents', { groupId, eventList })
   },
   async fetchEvent({ commit }, { groupId, eventId }) {
-    try {
-      const {
-        users,
-      } = await fetch(`${API_PATH}/attendance?event_id=${eventId}`, {
-        credentials: 'same-origin',
-      }).then(res => res.json())
+    // Fetch event attendance
+    const { users } = await api('get', '/attendance', { event_id: eventId })
 
-      return commit('populateEventAttendance', {
-        groupId,
-        eventId,
-        event: { users },
-      })
-    } catch (e) {
-      console.log(e)
-    }
+    return commit('setEventAttendance', {
+      groupId,
+      eventId,
+      users,
+    })
   },
 }
 
 const mutations = {
-  populateGroupList(state, { groups }) {
+  setGroupList(state, { groups }) {
     // group: { text, name, pic_url, description }
     groups.forEach(group => Vue.set(state, group.id, group))
   },
-  populateGroupEvents(state, { groupId, events }) {
+  setGroupEvents(state, { groupId, events }) {
     // event: { start_date, end_date, description, location }
     events.forEach(event => Vue.set(state[groupId], event.id, event))
   },
-  populateEventAttendance(state, { groupId, eventId, event }) {
+  setEventAttendance(state, { groupId, eventId, users }) {
+    // users: [{ user_id, status }]
     const events = state.groups[groupId].events
     Vue.set(events, eventId, { ...events[eventId], ...event })
+  },
+  setGroup(state, { groupId, group }) {
+    // group: { text, name, pic_url, description }
+    Vue.set(state.groups, groupId, { ...state.groups[groupId], ...group })
+  },
+  removeGroup(state, { groupId }) {
+    delete state.groups[groupId]
   },
 }
 
