@@ -19,7 +19,7 @@
       <v-btn v-else icon @click.stop="$router.push('/')">
         <v-icon>arrow_back</v-icon>
       </v-btn>
-      <v-toolbar-title>Application</v-toolbar-title>
+      <v-toolbar-title>Golah</v-toolbar-title>
     </v-toolbar>
     <main>
       <transition :name="transitionName">
