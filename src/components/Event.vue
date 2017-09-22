@@ -15,14 +15,14 @@
           <v-icon class="indigo--text">access_time</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
-          <v-list-tile-title>from {{event.startTime}}</v-list-tile-title>
+          <v-list-tile-title>from {{startDate}}</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
       <v-list-tile>
         <v-list-tile-action>
         </v-list-tile-action>
         <v-list-tile-content>
-          <v-list-tile-title>to {{event.startTime}}</v-list-tile-title>
+          <v-list-tile-title>to {{endDate}}</v-list-tile-title>
           <v-list-tile-sub-title>Data and time</v-list-tile-sub-title>
         </v-list-tile-content>
       </v-list-tile>
@@ -47,10 +47,9 @@
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
-    <div v-if='admin'>
-      <v-list>
+    <v-list>
         <v-list-group v-for="item in items" v-bind:key="item.title">
-          <v-list-tile slot="item" @click="">
+          <v-list-tile slot="item">
             <v-list-tile-action>
               <v-icon class="indigo--text">{{ item.icon }}</v-icon>
             </v-list-tile-action>
@@ -61,16 +60,14 @@
               <v-icon>keyboard_arrow_down</v-icon>
             </v-list-tile-action>
           </v-list-tile>
-          <v-list-tile v-for="member in item.members" v-bind:key="member.name" @click="">
-            <v-list-tile-avatar>
-                <img :src="`https://source.unsplash.com/a/256x256`" alt="">
-              </v-list-tile-avatar>
+          <!-- <v-list-tile v-for="member in item.members" v-bind:key="member.name">
             <v-list-tile-content>
-              <v-list-tile-title>{{groupId}}groupid:{{eventId}}</v-list-tile-title>
+              <v-list-tile-title v-text="member.name"></v-list-tile-title>
             </v-list-tile-content>
-          </v-list-tile>
+          </v-list-tile> -->
         </v-list-group>
       </v-list>
+    <div v-if='admin'>
       <v-dialog v-model="dialog" persistent>
         <v-btn primary dark large slot="activator" class="attendance">Take Attendance</v-btn>
         <v-card>
@@ -79,7 +76,7 @@
             <v-text-field v-model="vcode" label="Create verification code"></v-text-field>
             <small>*Participants have to key in this code to indicate attendance</small>
           </v-card-text>
-          <v-card-actions>
+          <v-card-actions> 
             <v-spacer></v-spacer>
             <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
             <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Save</v-btn>
@@ -98,7 +95,10 @@
 <script>
 export default {
   mounted() {
-    this.$store.dispatch('fetchEvent', { eventId: this.eventId })
+    this.$store.dispatch('fetchEvent', {
+      groupId: this.groupId,
+      eventId: this.eventId,
+    })
   },
 
   data() {
@@ -110,12 +110,12 @@ export default {
         {
           icon: 'mood',
           title: 'Going',
-          members: [{ name: 'Alice' }],
+          members: [this.GoingOnes],
         },
         {
           icon: 'mood_bad',
           title: 'Not Going',
-          members: [{ name: 'Bob' }],
+          members: [this.notGoingones],
         },
       ],
     }
@@ -124,14 +124,27 @@ export default {
   props: ['groupId', 'eventId'],
 
   computed: {
+    group: function() {
+      return this.$store.state.groups[this.groupId]
+    },
     event: function() {
-      return {
-        name: 'Training',
-        startTime: '2017-9-30 9:30pm',
-        endTime: '2017-9-30 11:30pm',
-        location: 'comm hall level 1',
-        description: 'please bring along an extra t-shirt.',
-      }
+      return this.group.events[this.eventId]
+    },
+    startDate: function() {
+      var datetime = new Date(parseInt(this.event.start_date) * 1000)
+      return datetime.toLocaleString()
+    },
+    endDate: function() {
+      var datetime = new Date(parseInt(this.event.end_date) * 1000)
+      return datetime.toLocaleString()
+    },
+    goingOnes: function() {
+      if (this.event.users == null) return []
+      return Object.values(this.event.users).filter(user => user.status === 1)
+    },
+    notGoingOnes: function() {
+      if (this.event.users == null) return []
+      return Object.values(this.event.users).filter(user => user.status === 2)
     },
   },
 

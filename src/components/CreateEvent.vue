@@ -14,7 +14,7 @@
           <v-flex xs6 sm6 class="datetime">
             <v-dialog
               persistent
-              v-model="modal"
+              v-model="modal1"
               lazy
               full-width
             >  
@@ -49,7 +49,7 @@
                 prepend-icon="access_time"
                 readonly
               ></v-text-field>
-              <v-time-picker v-model="startTime" actions>
+              <v-time-picker v-model="startTime" format="24hr" actions>
                 <template scope="{ save, cancel }">
                   <v-card-actions>
                     <v-btn flat primary @click.native="cancel()">Cancel</v-btn>
@@ -63,7 +63,7 @@
         
             <v-dialog
               persistent
-              v-model="modal"
+              v-model="modal3"
               lazy
               full-width
             >
@@ -89,7 +89,7 @@
           <v-flex xs6 sm6 class="datetime">
             <v-dialog
               persistent
-              v-model="modal2"
+              v-model="modal4"
               lazy
             >
               <v-text-field
@@ -99,7 +99,7 @@
                 prepend-icon="access_time"
                 readonly
               ></v-text-field>
-              <v-time-picker v-model="endTime" actions>
+              <v-time-picker v-model="endTime" format="24hr" actions>
                 <template scope="{ save, cancel }">
                   <v-card-actions>
                     <v-btn flat primary @click.native="cancel()">Cancel</v-btn>
@@ -138,7 +138,7 @@
         </v-container>
       </div>
       <div class="button-wrapper">
-        <v-btn absolute fab top right dark class="green" @click="$router.go(-1)">
+        <v-btn absolute fab top right dark class="green" @click="submit">
           <icon name="check"></icon>
         </v-btn>
       </div>
@@ -158,30 +158,33 @@ export default {
       startTime: null,
       endDate: null,
       endTime: null,
-      menu: false,
-      modal: false,
-      menu2: false,
+      modal1: false,
       modal2: false,
+      modal3: false,
+      modal4: false,
       location: '',
       alert: null,
-      items: [
-        { text: 'State 1' },
-        // { text: 'State 2' },
-        // { text: 'State 3' },
-        // { text: 'State 4' },
-        // { text: 'State 5' },
-      ],
       states: ['10 minutes', '30 minutes', '1 hour', '2 hours', '1 day'],
       description: '',
     }
   },
-
+  props: ['groupId'],
   methods: {
     uploaded(res) {
       console.log(res)
     },
     submit() {
-      this.$router.push('/')
+      this.$store.dispatch('createEvent', {
+        groupId: this.groupId,
+        name: this.eventName,
+        startDate: this.startDate,
+        startTime: this.startTime,
+        endDate: this.endDate,
+        endTime: this.endTime,
+        description: this.description,
+        location: this.location,
+      })
+      this.$router.push(`/g/${this.groupId}/`)
     },
   },
 

@@ -53,7 +53,7 @@ export default {
 
       const now = Date.now()
       return Object.values(this.group.events).filter(
-        event => event.dateTime >= now
+        event => event.start_date + '000' >= now
       )
     },
     completedEvents: function() {
@@ -61,7 +61,7 @@ export default {
 
       const now = Date.now()
       return Object.values(this.group.events).filter(
-        event => event.dateTime < now
+        event => event.start_date + '000' < now
       )
     },
   },

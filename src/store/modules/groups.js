@@ -66,7 +66,48 @@ const actions = {
   /*
    * Events
    */
+  async createEvent(
+    { commit },
+    {
+      groupId,
+      name,
+      startDate,
+      startTime,
+      endDate,
+      endTime,
+      description,
+      location,
+    }
+  ) {
+    // Create group
+    var startDateTime = new Date(startDate + 'T' + startTime + ':00').getTime()
+    var endDateTime = new Date(endDate + ' ' + endTime + ':00').getTime()
+    // console.log(startDate)
+    // console.log(startTime)
+    console.log(startDateTime)
+    console.log(groupId)
+    console.log(name)
 
+    const { event_id } = await api('post', '/event', {
+      start_date: startDateTime / 1000,
+      group_id: groupId,
+      name,
+      end_date: endDateTime / 1000,
+      description,
+      location,
+      alert_time: '10',
+    })
+
+    // Fetch group info
+    const event = await api('get', '/event', { event_id })
+
+    commit('setEvent', { groupId, eventId: event_id, event })
+    commit('setEventAttendance', {
+      groupId,
+      eventId: event_id,
+      users: null,
+    })
+  },
   async fetchEvents({ commit }, { groupId }) {
     // Fetch events in group
     const eventIds = await api('get', '/group/event', { group_id: groupId })
@@ -75,7 +116,6 @@ const actions = {
     const eventInfos = await Promise.all(
       eventIds.map(event => api('get', '/event', { event_id: event.event_id }))
     )
-
     const events = eventInfos.map((info, i) => ({
       id: eventIds[i].event_id,
       ...info,
@@ -106,12 +146,18 @@ const mutations = {
     // event: { start_date, end_date, description, location }
     const eventMap = {}
     events.forEach(event => (eventMap[event.id] = event))
-    Vue.set(state[groupId], events, eventMap)
+    Vue.set(state[groupId], 'events', eventMap)
+    console.log('events.state')
+    console.log(state[groupId].events['1'])
+  },
+  setEvent(state, { groupId, eventId, event }) {
+    event.eventId = eventId
+    Vue.set(state[groupId].events, eventId, event)
   },
   setEventAttendance(state, { groupId, eventId, users }) {
     // users: [{ user_id, status }]
     const events = state.groups[groupId].events
-    Vue.set(events, eventId, { ...events[eventId], ...event })
+    Vue.set(events, eventId, { ...events[eventId], userList: users })
   },
   setGroup(state, { groupId, group }) {
     // group: { text, name, pic_url, description }

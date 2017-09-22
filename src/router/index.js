@@ -33,6 +33,7 @@ export default new Router({
       path: '/g/:groupId/createEvent',
       name: 'CreateEvent',
       component: CreateEvent,
+      props: true,
     },
 
     {
