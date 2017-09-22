@@ -3,14 +3,14 @@
     <div class="bg"></div>
     <v-layout column wrap class="text-xs-center login">
       <div class="logo">
-        <img src="/" />
+        <img alt="Go Lah!" src="../assets/logo.png" />
       </div>
       <div>
         <fb-signin-button
           :params="fbSignInParams"
           @success="onSignInSuccess"
           @error="onSignInError">
-          <v-btn fab large class="facebook">
+          <v-btn fab large class="facebook" name="facebook login">
             <icon name="facebook" scale="2"></icon>
           </v-btn>
         </fb-signin-button>
@@ -61,7 +61,7 @@ export default {
   z-index: 1
   min-height: 100vh
 
-  background-image: url(https://source.unsplash.com/featured/?sports)
+  background-image: url(../assets/bg.jpg)
   background-size: cover
   filter: grayscale(50%) brightness(0.5)
 
