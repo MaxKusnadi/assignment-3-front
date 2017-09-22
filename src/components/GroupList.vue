@@ -4,7 +4,7 @@
     <v-list>
       <v-list-tile v-for="group in Object.values(groups)" :key="group.groupId" avatar @click="$router.push(`/g/${group.groupId}/`)">
         <v-list-tile-avatar>
-          <img :src="`https://source.unsplash.com/${group.groupId}/256x256`" alt="">
+          <img :src="group.pic_url || require('../assets/bg.jpg')" alt="">
         </v-list-tile-avatar>
         <v-list-tile-title v-text="group.name"></v-list-tile-title>
       </v-list-tile>
