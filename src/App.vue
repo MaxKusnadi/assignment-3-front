@@ -1,5 +1,10 @@
 <template>
-  <v-fade-transition v-if="user.fbId == null">
+  <v-fade-transition v-if="user.loggedIn == null">
+    <v-app>
+      <loader />
+    </v-app>
+  </v-fade-transition>
+  <v-fade-transition v-else-if="user.loggedIn == false">
     <v-app>
       <login />
     </v-app>
@@ -28,6 +33,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import Loader from '@/components/Loader'
 import Login from '@/components/Login'
 import GroupList from '@/components/GroupList'
 
@@ -59,6 +65,7 @@ export default {
   },
 
   components: {
+    Loader,
     Login,
     GroupList,
   },
@@ -67,6 +74,12 @@ export default {
 
 <style lang="stylus">
 @import './stylus/main'
+
+orange = #F08655
+green = #9ED097
+blue = #099EE9
+yellow = #F8CF92
+pink = #EE90BA
 
 .container
   padding 0
