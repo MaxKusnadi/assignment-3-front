@@ -1,5 +1,10 @@
 <template>
-  <v-fade-transition v-if="user.fbId == null">
+  <v-fade-transition v-if="user.loggedIn == null">
+    <v-app>
+      <loader />
+    </v-app>
+  </v-fade-transition>
+  <v-fade-transition v-else-if="user.loggedIn == false">
     <v-app>
       <login />
     </v-app>
@@ -8,25 +13,43 @@
     <tutorial />
   </v-fade-transition>
   <v-app toolbar v-else>
-    <v-navigation-drawer
-      absolute
-      temporary
-      light
-      v-model="drawer"
-    >
-      <group-list />
-    </v-navigation-drawer>
     <v-toolbar fixed>
-      <v-toolbar-side-icon v-if="!canGoBack" @click.stop="drawer = !drawer">
-      </v-toolbar-side-icon>
-      <v-btn v-else icon @click.stop="$router.push('/')">
+      <v-btn icon v-if="history.length !== 0" :to="history[history.length - 1]">
         <v-icon>arrow_back</v-icon>
       </v-btn>
       <v-toolbar-title>Golah</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-icon>share</v-icon>
+      </v-btn>
+      <v-menu
+       bottom
+     >
+        <v-btn icon slot="activator">
+          <v-icon>more_vert</v-icon>
+        </v-btn>
+        <v-list>
+          <v-list-tile avatar tag="div" @click.stop.prevent="">
+            <v-list-tile-avatar>
+              <img :src="`//graph.facebook.com/v2.10/${user.fbId}/picture`" :alt="`${user.firstName}`">
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>{{user.firstName}} {{user.lastName}}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-divider></v-divider>
+          <v-list-tile to="/settings">
+            <v-list-tile-title>Settings</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile @click="logout">
+            <v-list-tile-title>Sign out</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
     </v-toolbar>
     <main>
       <transition :name="transitionName">
-        <router-view class="router-view"></router-view>
+        <router-view></router-view>
       </transition>
     </main>
   </v-app>
@@ -34,6 +57,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import Loader from '@/components/Loader'
 import Login from '@/components/Login'
 import GroupList from '@/components/GroupList'
 import Tutorial from '@/components/Tutorial'
@@ -41,9 +65,8 @@ import Tutorial from '@/components/Tutorial'
 export default {
   data() {
     return {
-      canGoBack: this.$router.currentRoute.path !== '/',
-      drawer: false,
-      transitionName: 'slide-left',
+      history: this.$router.currentRoute.path !== '/' ? ['/'] : [],
+      transitionName: 'back',
     }
   },
 
@@ -56,16 +79,29 @@ export default {
     },
   },
 
+  methods: {
+    logout() {
+      if (FB == null) return
+
+      FB.logout()
+      this.$store.dispatch('notLoggedIn')
+    },
+  },
+
   watch: {
     $route(to, from) {
-      const toDepth = to.path.split('/').length
-      const fromDepth = from.path.split('/').length
-      this.canGoBack = to.path !== '/'
-      this.transitionName = toDepth < fromDepth ? 'back' : 'forward'
+      if (this.history[this.history.length - 1] === to.path) {
+        this.transitionName = 'back'
+        this.history.pop()
+      } else {
+        this.transitionName = 'forward'
+        this.history.push(from.path)
+      }
     },
   },
 
   components: {
+    Loader,
     Login,
     GroupList,
     Tutorial,
@@ -76,22 +112,26 @@ export default {
 <style lang="stylus">
 @import './stylus/main'
 
-.container
-  padding: 0
+orange = #F08655
+green = #9ED097
+blue = #099EE9
+yellow = #F8CF92
+pink = #EE90BA
 
-.router-view
-  position: absolute
+.container
+  padding 0
+  max-width 1200px
 
 .forward-enter-active, .back-enter-active
-  transition: all 0.25s ease-out
+  transition all 0.25s ease-out
 
 .forward-leave-active, .back-leave-active
-  transition: all 0.25s ease-in
+  transition all 0.25s ease-in
 
 .forward-enter, .back-leave-to
-  transform: translate(100vw, 0)
+  transform translate(100vw, 0)
 
 .back-enter, .forward-leave-to
-  transform: translate(-100vw, 0)
+  transform translate(-100vw, 0)
 
 </style>

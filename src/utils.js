@@ -4,16 +4,16 @@ export async function api(method = 'get', path, body, json = true) {
   const options = { method, credentials: 'include' }
 
   if (process.env.NODE_ENV !== 'production') {
-    console.log(`${method.toUpperCase()} ${path}\n${JSON.stringify(body)}`)
+    console.log(`${method.toUpperCase()} ${path} ${JSON.stringify(body)}`)
   }
 
   if (body != null) {
     if (method === 'get') {
-      const params = Object.entries(body).reduce(
-        (accum, [key, value]) => `${accum}${key}=${encodeURIComponent(value)}&`,
-        '?'
-      )
-      path += params
+      const params = Object.entries(body)
+        .map(([key, val]) => [encodeURIComponent(key), encodeURIComponent(val)])
+        .map(([key, val]) => `${key}=${val}`)
+        .join('&')
+      path += `?${params}`
     } else {
       options.headers = { 'Content-Type': 'application/json' }
       options.body = JSON.stringify(body)
@@ -27,10 +27,10 @@ export async function api(method = 'get', path, body, json = true) {
       case 400:
         throw new Error(res.text)
       case 401:
-        console.log('Unauthorized')
+        console.log('401: Unauthorized')
         break
       case 500:
-        console.log('Internal Server Error')
+        console.log('500: Internal Server Error')
         break
       default:
         throw new Error(res.statusText)

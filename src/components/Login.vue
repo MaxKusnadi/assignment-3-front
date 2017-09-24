@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <div class="bg"></div>
+  <div class="login">
     <v-layout column wrap class="text-xs-center login">
       <div class="logo">
         <img alt="Go Lah!" src="../assets/logo.png" />
@@ -32,19 +31,9 @@ export default {
 
   methods: {
     onSignInSuccess(res) {
-      FB.api(
-        '/me',
-        { fields: ['id', 'first_name', 'last_name', 'email'] },
-        me => {
-          this.$store.dispatch('login', {
-            accessToken: res.authResponse.accessToken,
-            fbId: me.id,
-            firstName: me.first_name,
-            lastName: me.last_name,
-            email: me.email,
-          })
-        }
-      )
+      this.$store.dispatch('login', {
+        accessToken: res.authResponse.accessToken,
+      })
     },
     onSignInError(err) {
       console.log(err)
@@ -54,18 +43,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.bg
-  position: fixed
-  left: 0
-  right: 0
-  z-index: 1
-  min-height: 100vh
-
+.login
   background-image: url(../assets/bg.jpg)
   background-size: cover
-  filter: grayscale(50%) brightness(0.5)
-
-.login
   position: fixed
   left: 0
   right: 0

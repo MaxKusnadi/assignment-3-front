@@ -1,6 +1,7 @@
 import { api } from '@/utils'
 
 const state = {
+  loggedIn: null,
   firstName: null,
   lastName: null,
   email: null,
@@ -11,17 +12,32 @@ const state = {
 const getters = {}
 
 const actions = {
-  async login({ commit }, { accessToken, fbId, firstName, lastName, email }) {
-    const payload = {
-      first_name: firstName,
-      last_name: lastName,
-      email,
-      fb_id: fbId,
-      user_access_token: accessToken,
-    }
+  notLoggedIn({ commit }) {
+    commit('setLoggedIn', { loggedIn: false })
+  },
+  async login({ commit }, { accessToken }) {
+    FB.api(
+      '/me',
+      { fields: ['id', 'first_name', 'last_name', 'email'] },
+      async me => {
+        const payload = {
+          first_name: me.first_name,
+          last_name: me.last_name,
+          email: me.email,
+          fb_id: me.id,
+          user_access_token: accessToken,
+        }
 
-    await api('get', '/login', payload, false)
-    commit('setUser', { firstName, lastName, email, fbId })
+        await api('get', '/login', payload, false)
+
+        commit('setUser', {
+          firstName: me.first_name,
+          lastName: me.last_name,
+          email: me.email,
+          fbId: me.id,
+        })
+      }
+    )
   },
 
   finishTutorial({ commit }) {
@@ -35,6 +51,10 @@ const mutations = {
     state.lastName = lastName
     state.email = email
     state.fbId = fbId
+    state.loggedIn = true
+  },
+  setLoggedIn(state, { loggedIn }) {
+    state.loggedIn = loggedIn
   },
   setTutorial(state) {
     state.tut = false
