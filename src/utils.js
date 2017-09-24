@@ -9,11 +9,11 @@ export async function api(method = 'get', path, body, json = true) {
 
   if (body != null) {
     if (method === 'get') {
-      const params = Object.entries(body).reduce(
-        (accum, [key, value]) => `${accum}${key}=${encodeURIComponent(value)}&`,
-        '?'
-      )
-      path += params
+      const params = Object.entries(body)
+        .map(([key, val]) => [encodeURIComponent(key), encodeURIComponent(val)])
+        .map(([key, val]) => `${key}=${val}`)
+        .join('&')
+      path += `?${params}`
     } else {
       options.headers = { 'Content-Type': 'application/json' }
       options.body = JSON.stringify(body)
