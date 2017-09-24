@@ -2,16 +2,19 @@
   <div class="login">
     <v-layout column wrap class="text-xs-center login">
       <div class="logo">
-        <img alt="Go Lah!" src="../assets/logo.png" />
+        <img alt="Golah" src="/static/img/logo.png" />
       </div>
       <div>
         <fb-signin-button
+          name="Facebook Login"
+          class="facebook btn btn--floating btn--large btn--raised"
           :params="fbSignInParams"
           @success="onSignInSuccess"
-          @error="onSignInError">
-          <v-btn fab large class="facebook" name="facebook login">
+          @error="onSignInError"
+        >
+          <div class="btn__content">
             <icon name="facebook" scale="2"></icon>
-          </v-btn>
+          </div>
         </fb-signin-button>
       </div>
     </v-layout>
@@ -44,30 +47,30 @@ export default {
 
 <style lang="stylus" scoped>
 .login
-  background-image: url(../assets/bg.jpg)
-  background-size: cover
-  position: fixed
-  left: 0
-  right: 0
-  z-index: 2
-  min-height: 100vh
+  background-image url(/static/img/bg.jpg)
+  background-size cover
+  position fixed
+  left 0
+  right 0
+  z-index 2
+  min-height 100vh
 
-  display: flex
-  align-content: center
-  justify-content: center
+  display flex
+  align-content center
+  justify-content center
 
 .logo
-  width: 256px
-  height: 256px
-  margin: 0 auto 32px auto
+  width 256px
+  height 256px
+  margin 0 auto 32px auto
 
 .btn.btn--floating.facebook
-  background-color: #3b5998
-  color: #ffffff
-  display: inline-block
+  background-color #3b5998
+  color #ffffff
+  display inline-block
 
 .btn.btn--floating.google-plus
-  background-color: #dd4b39
-  color: #ffffff
-  display: inline-block
+  background-color #dd4b39
+  color #ffffff
+  display inline-block
 </style>
