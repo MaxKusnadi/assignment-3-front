@@ -4,7 +4,7 @@ export async function api(method = 'get', path, body, json = true) {
   const options = { method, credentials: 'include' }
 
   if (process.env.NODE_ENV !== 'production') {
-    console.log(`${method.toUpperCase()} ${path}\n${JSON.stringify(body)}`)
+    console.log(`${method.toUpperCase()} ${path} ${JSON.stringify(body)}`)
   }
 
   if (body != null) {
@@ -27,10 +27,10 @@ export async function api(method = 'get', path, body, json = true) {
       case 400:
         throw new Error(res.text)
       case 401:
-        console.log('Unauthorized')
+        console.log('401: Unauthorized')
         break
       case 500:
-        console.log('Internal Server Error')
+        console.log('500: Internal Server Error')
         break
       default:
         throw new Error(res.statusText)
