@@ -4,6 +4,9 @@
       <login />
     </v-app>
   </v-fade-transition>
+  <v-fade-transition v-else-if="(Object.values(groups)).length == 0 && user.tut">
+    <tutorial />
+  </v-fade-transition>
   <v-app toolbar v-else>
     <v-navigation-drawer
       absolute
@@ -33,6 +36,7 @@
 import { mapState } from 'vuex'
 import Login from '@/components/Login'
 import GroupList from '@/components/GroupList'
+import Tutorial from '@/components/Tutorial'
 
 export default {
   data() {
@@ -47,6 +51,9 @@ export default {
 
   computed: {
     ...mapState(['user']),
+    groups: function() {
+      return this.$store.state.groups
+    },
   },
 
   watch: {
@@ -61,6 +68,7 @@ export default {
   components: {
     Login,
     GroupList,
+    Tutorial,
   },
 }
 </script>

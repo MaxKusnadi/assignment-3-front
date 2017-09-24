@@ -5,6 +5,7 @@ const state = {
   lastName: null,
   email: null,
   fbId: null,
+  tut: true,
 }
 
 const getters = {}
@@ -20,8 +21,12 @@ const actions = {
     }
 
     await api('get', '/login', payload, false)
-
     commit('setUser', { firstName, lastName, email, fbId })
+  },
+
+  finishTutorial({ commit }) {
+    console.log('yep im here')
+    commit('setTutorial')
   },
 }
 const mutations = {
@@ -30,6 +35,9 @@ const mutations = {
     state.lastName = lastName
     state.email = email
     state.fbId = fbId
+  },
+  setTutorial(state) {
+    state.tut = false
   },
 }
 

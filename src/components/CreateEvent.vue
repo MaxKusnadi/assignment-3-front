@@ -211,8 +211,3 @@ export default {
   height: 50px
 
 </style>
-
-<style lang="stylus">
-.avatar-cropper-btn
-  margin: 0
-</style>

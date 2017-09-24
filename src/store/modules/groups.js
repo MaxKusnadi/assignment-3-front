@@ -156,7 +156,7 @@ const mutations = {
   },
   setEventAttendance(state, { groupId, eventId, users }) {
     // users: [{ user_id, status }]
-    const events = state.groups[groupId].events
+    const events = state[groupId].events
     Vue.set(events, eventId, { ...events[eventId], userList: users })
   },
   setGroup(state, { groupId, group }) {

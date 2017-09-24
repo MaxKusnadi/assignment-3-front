@@ -60,11 +60,11 @@
               <v-icon>keyboard_arrow_down</v-icon>
             </v-list-tile-action>
           </v-list-tile>
-          <!-- <v-list-tile v-for="member in item.members" v-bind:key="member.name">
+          <v-list-tile v-for="member in item.members" v-bind:key="member.name">
             <v-list-tile-content>
               <v-list-tile-title v-text="member.name"></v-list-tile-title>
             </v-list-tile-content>
-          </v-list-tile> -->
+          </v-list-tile>
         </v-list-group>
       </v-list>
     <div v-if='admin'>
@@ -85,9 +85,24 @@
       </v-dialog>
     </div> 
       
-    <div class="buttons" v-else>
-            <v-btn primary dark large class="button">Going</v-btn>
-            <v-btn error dark large class="button">Not Going</v-btn>
+    <div v-else>
+            <!-- <v-btn primary dark large class="button">Going</v-btn>
+            <v-btn error dark large class="button">Not Going</v-btn> -->
+      <v-dialog v-model="dialog" persistent>
+        <v-btn primary dark large slot="activator" class="attendance">I'm here</v-btn>
+        <v-card>
+          
+          <v-card-text>
+            <v-text-field v-model="vcode" label="Enter verification code"></v-text-field>
+            <small>*enter the verification code that you get from the group admin </small>
+          </v-card-text>
+          <v-card-actions> 
+            <v-spacer></v-spacer>
+            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
+            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">OK</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
   </div>
 </template> 
@@ -103,19 +118,19 @@ export default {
 
   data() {
     return {
-      admin: true,
+      admin: false,
       dialog: false,
       vcode: null,
       items: [
         {
           icon: 'mood',
           title: 'Going',
-          members: [this.GoingOnes],
+          members: this.goingOnes,
         },
         {
           icon: 'mood_bad',
           title: 'Not Going',
-          members: [this.notGoingones],
+          members: this.notGoingones,
         },
       ],
     }
@@ -125,9 +140,12 @@ export default {
 
   computed: {
     group: function() {
+      console.log(this.$store.state.groups[this.groupId])
       return this.$store.state.groups[this.groupId]
     },
     event: function() {
+      console.log(this.group.events[this.eventId])
+      console.log(this.group.events[this.eventId].userList)
       return this.group.events[this.eventId]
     },
     startDate: function() {
@@ -139,12 +157,13 @@ export default {
       return datetime.toLocaleString()
     },
     goingOnes: function() {
-      if (this.event.users == null) return []
-      return Object.values(this.event.users).filter(user => user.status === 1)
+      console.log(this.event.userList)
+      if (this.event.userList == null) return []
+      return Object.values(this.event.userList).filter(user => user.status === 1)
     },
     notGoingOnes: function() {
-      if (this.event.users == null) return []
-      return Object.values(this.event.users).filter(user => user.status === 2)
+      if (this.event.userList == null) return []
+      return Object.values(this.event.userList).filter(user => user.status === 2)
     },
   },
 
@@ -185,7 +204,3 @@ export default {
   margin: 0
 </style>
 
-<style lang="stylus">
-.avatar-cropper-btn
-  margin: 0
-</style>

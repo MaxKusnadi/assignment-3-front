@@ -4,7 +4,7 @@
 <script>
 export default {
   mounted() {
-    this.$store.dispatch('fetchGroups')
+    // this.$store.dispatch('fetchGroups')
   },
 }
 </script>
