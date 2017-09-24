@@ -19,9 +19,30 @@
       <v-btn icon>
         <v-icon>share</v-icon>
       </v-btn>
-      <v-btn icon>
-        <v-icon>more_vert</v-icon>
-      </v-btn>
+      <v-menu
+       bottom
+     >
+        <v-btn icon slot="activator">
+          <v-icon>more_vert</v-icon>
+        </v-btn>
+        <v-list>
+          <v-list-tile avatar tag="div" @click.stop.prevent="">
+            <v-list-tile-avatar>
+              <img :src="`//graph.facebook.com/v2.10/${user.fbId}/picture`" :alt="`${user.firstName}`">
+            </v-list-tile-avatar>
+            <v-list-tile-content>
+              <v-list-tile-title>{{user.firstName}} {{user.lastName}}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-divider></v-divider>
+          <v-list-tile to="/settings">
+            <v-list-tile-title>Settings</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile @click="logout">
+            <v-list-tile-title>Sign out</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
     </v-toolbar>
     <main>
       <transition :name="transitionName">
@@ -41,8 +62,7 @@ export default {
   data() {
     return {
       history: this.$router.currentRoute.path !== '/' ? ['/'] : [],
-      drawer: false,
-      transitionName: 'slide-left',
+      transitionName: 'back',
     }
   },
 
@@ -50,6 +70,15 @@ export default {
 
   computed: {
     ...mapState(['user']),
+  },
+
+  methods: {
+    logout() {
+      if (FB == null) return
+
+      FB.logout()
+      this.$store.dispatch('notLoggedIn')
+    },
   },
 
   watch: {
