@@ -24,6 +24,19 @@
         <icon name="plus"></icon>
       </v-btn>
     </div>
+    <v-dialog v-model="dialog" persistent>
+      <v-btn error dark large class="deleteGroup" @click="deleteGroup">Delete group</v-btn>
+      <v-card>
+        <v-card-title>
+          <div class="headline">Are you sure you want to delete the group?</div>
+        </v-card-title>
+        <v-card-actions> 
+          <v-spacer></v-spacer>
+          <v-btn class="blue--text darken-1" flat @click.native="dialog = false" @click="deleteGroup">Yes</v-btn>
+          <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Cancel</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -68,6 +81,10 @@ export default {
 
   methods: {
     moment,
+    deleteGroup() {
+      this.$store.dispatch('deleteGroup', {groupId: this.groupId})
+      this.$router.push('/')
+    },
   },
 
   components: {},
@@ -77,4 +94,10 @@ export default {
 <style lang="stylus" scoped>
 .button-wrapper
   position: relative
+
+.deleteGroup
+  position: fixed
+  bottom: 0px
+  width: 100%
+  margin: 0
 </style>
