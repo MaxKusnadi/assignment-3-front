@@ -9,7 +9,7 @@
       >
         <v-card class="group">
           <v-card-media
-            :src="group.pic_url || require('../assets/bg.jpg')" alt=""
+            :src="group.pic_url || ''" alt=""
             height="200px"
           >
           </v-card-media>

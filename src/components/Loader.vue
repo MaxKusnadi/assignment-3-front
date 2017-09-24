@@ -24,7 +24,7 @@ export default {}
 
 <style lang="stylus" scoped>
 .loader
-  background-image: url(../assets/bg.jpg)
+  background-image: url(/static/img/bg.jpg)
   background-size: cover
   min-height 100vh
 </style>
