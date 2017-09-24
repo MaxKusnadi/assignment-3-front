@@ -19,16 +19,12 @@
         </v-card>
       </v-flex>
     </v-layout>
+    <div class="button-wrapper">
+      <v-btn absolute fab top right @click="$router.push(`/createGroup/`)">
+        <icon name="plus"></icon>
+      </v-btn>
+    </div>
   </v-container>
-    <!--
-    <v-list-tile avatar @click="$router.push('/createGroup/')">
-    <v-list-tile-avatar>
-      <v-icon class="grey--text text--darken-1">add</v-icon>
-    </v-list-tile-avatar>
-    <v-list-tile-title class="grey--text text--darken-1">
-      Create a Group
-    </v-list-tile-title>
-    -->
 </template>
 
 <script>
@@ -42,6 +38,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.layout
+  min-height 60px
+
 .group
   cursor pointer
   transition all 0.2s
@@ -49,4 +48,7 @@ export default {
 .group:hover
   transform translateY(-1px)
   box-shadow 0 2px 5px rgba(0, 0, 0, 0.5)
+
+.button-wrapper
+  position: relative
 </style>

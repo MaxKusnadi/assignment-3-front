@@ -25,11 +25,11 @@
       </v-btn>
     </div>
     <v-dialog v-model="dialog" persistent>
-      <v-btn error dark large class="deleteGroup" @click="deleteGroup">Delete group</v-btn>
+      <v-btn error dark large class="deleteGroup" slot="activator">Delete group</v-btn>
       <v-card>
-        <v-card-title>
-          <div class="headline">Are you sure you want to delete the group?</div>
-        </v-card-title>
+        <v-card-text>
+          <div>Are you sure you want to delete this group and all the group events?</div>
+        </v-card-text>
         <v-card-actions> 
           <v-spacer></v-spacer>
           <v-btn class="blue--text darken-1" flat @click.native="dialog = false" @click="deleteGroup">Yes</v-btn>
@@ -52,7 +52,9 @@ export default {
   },
 
   data() {
-    return {}
+    return {
+      dialog: false
+    }
   },
 
   props: ['groupId'],
