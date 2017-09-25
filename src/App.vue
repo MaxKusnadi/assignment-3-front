@@ -19,9 +19,20 @@
       </v-btn>
       <v-toolbar-title>Golah</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>share</v-icon>
-      </v-btn>
+       <v-dialog v-model="dialog" persistent>
+        <v-btn icon slot="activator" @click="copyLink">
+          <v-icon>share</v-icon>
+        </v-btn>
+        <v-card>
+          <v-card-text>
+            <div>the link has been copied to your clipboard</div>
+          </v-card-text>
+          <v-card-actions> 
+            <v-spacer></v-spacer>
+            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">OK</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <v-menu
        bottom
      >
@@ -67,6 +78,7 @@ export default {
     return {
       history: this.$router.currentRoute.path !== '/' ? ['/'] : [],
       transitionName: 'back',
+      dialog: false,
     }
   },
 
@@ -85,6 +97,30 @@ export default {
 
       FB.logout()
       this.$store.dispatch('notLoggedIn')
+    },
+    copyLink() {
+      // var copyTextarea = document.querySelector('.copiedLink')
+      // copyTextarea.select()
+
+      // try {
+      //   var successful = document.execCommand('copy')
+      //   var msg = successful ? 'successful' : 'unsuccessful'
+      //   console.log('Copying text command was ' + msg)
+      // } catch (err) {
+      //   console.log('Oops, unable to copy')
+      // }
+      var link = 'http://cs3216-assignment-3.surge.sh' + this.$router.currentRoute.path
+      var dummy = document.createElement("input");
+     
+      document.body.appendChild(dummy);
+  
+      dummy.setAttribute("id", "dummy_id");
+   
+      dummy.setAttribute('value', link)
+
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy)
     },
   },
 

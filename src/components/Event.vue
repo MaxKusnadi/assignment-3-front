@@ -48,33 +48,42 @@
       </v-list-tile>
     </v-list>
     <v-list>
-        <v-list-group v-for="item in items" v-bind:key="item.title">
-          <v-list-tile slot="item">
-            <v-list-tile-action>
-              <v-icon class="indigo--text">{{ item.icon }}</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            </v-list-tile-content>
-            <v-list-tile-action>
-              <v-icon>keyboard_arrow_down</v-icon>
-            </v-list-tile-action>
-          </v-list-tile>
-          <v-list-tile v-for="member in item.members" v-bind:key="member.name">
-            <v-list-tile-content>
-              <v-list-tile-title v-text="member.name"></v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list-group>
-      </v-list>
+      <v-list-group v-for="item in items" v-bind:key="item.title">
+        <v-list-tile slot="item">
+          <v-list-tile-action>
+            <v-icon class="indigo--text">{{ item.icon }}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+          </v-list-tile-content>
+          <v-list-tile-action>
+            <v-icon>keyboard_arrow_down</v-icon>
+          </v-list-tile-action>
+        </v-list-tile>
+        <v-list-tile v-for="member in item.members" v-bind:key="member.name">
+          <v-list-tile-content>
+            <v-list-tile-title v-text="member.name"></v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list-group>
+    </v-list>
     <div v-if='admin'>
       <v-dialog v-model="dialog" persistent>
         <v-btn primary dark large slot="activator" class="attendance">Take Attendance</v-btn>
-        <v-card>
-          
+        <v-card v-if='vCode==null'> 
           <v-card-text>
-            <v-text-field v-model="vcode" label="Create verification code"></v-text-field>
+            <v-text-field v-model="newCode" label="Create verification code"></v-text-field>
             <small>*Participants have to key in this code to indicate attendance</small>
+          </v-card-text>
+          <v-card-actions> 
+            <v-spacer></v-spacer>
+            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
+            <v-btn class="blue--text darken-1" flat @click.native="dialog = false" @click="submit">Save</v-btn>
+          </v-card-actions>
+        </v-card>
+        <v-card v-else> 
+          <v-card-text>
+            <div>Verification code: {{vCode}}</div>
           </v-card-text>
           <v-card-actions> 
             <v-spacer></v-spacer>
@@ -86,23 +95,43 @@
     </div> 
       
     <div v-else>
-            <!-- <v-btn primary dark large class="button">Going</v-btn>
-            <v-btn error dark large class="button">Not Going</v-btn> -->
-      <v-dialog v-model="dialog" persistent>
+      <div class="buttons" v-if="status==0">
+        <v-btn primary dark large class="button" @click="going">Going</v-btn>
+        <v-dialog class="button" v-model="dialog" persistent>
+          <v-btn error dark large slot="activator" class="notgoing">Not Going</v-btn>
+          <v-card>
+            <v-card-text>
+              <v-text-field v-model="remark" label="Remark"></v-text-field>
+            </v-card-text>
+            <v-card-actions> 
+              <v-spacer></v-spacer>
+              <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Cancel</v-btn>
+              <v-btn class="blue--text darken-1" flat @click.native="dialog = false" @click="notGoing">OK</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+       
+      </div>
+      <v-dialog v-else-if="vCode" v-model="dialog" persistent>
         <v-btn primary dark large slot="activator" class="attendance">I'm here</v-btn>
         <v-card>
-          
           <v-card-text>
-            <v-text-field v-model="vcode" label="Enter verification code"></v-text-field>
-            <small>*enter the verification code that you get from the group admin </small>
+            <v-text-field v-model="newCode" label="Enter verification code"></v-text-field>
+            <small v-if="wrongCode">*Invalid code </small>
+            <small v-else>*enter the verification code that you get from the group admin </small>
           </v-card-text>
           <v-card-actions> 
             <v-spacer></v-spacer>
             <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
-            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">OK</v-btn>
+            <v-btn class="blue--text darken-1" flat @click.native="dialog = verify">OK</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <div v-else class="indicator">
+        <div v-if="status==1">I will go</div>
+        <div v-if="status==2">I will not go</div>
+      </div>
+      
     </div>
   </div>
 </template> 
@@ -114,13 +143,13 @@ export default {
       groupId: this.groupId,
       eventId: this.eventId,
     })
+
   },
 
   data() {
     return {
-      admin: false,
       dialog: false,
-      vcode: null,
+      newCode: null,
       items: [
         {
           icon: 'mood',
@@ -133,6 +162,8 @@ export default {
           members: this.notGoingones,
         },
       ],
+      remark: null,
+      wrongCode: false,
     }
   },
 
@@ -165,14 +196,48 @@ export default {
       if (this.event.userList == null) return []
       return Object.values(this.event.userList).filter(user => user.status === 2)
     },
+    admin: function() {
+      var myId = this.$store.state.user.fb_id
+      var creatorId = this.group.creator_id
+      if (myId === creatorId) {
+        return true
+      } else {
+        return false
+      }
+    },
+    vCode: function() {
+      return this.event.vCode
+    },
+    status: function() {
+      if (this.event.userList == null) {
+        return 0
+      }
+      // var myId = this.$store.state.user.fb_id
+      
+      // var me = this.event.userList[myId]
+      // return me.status
+      return 0
+    }
   },
 
   methods: {
-    uploaded(res) {
-      console.log(res)
-    },
     submit() {
-      this.$router.push('/')
+      this.$store.dispatch('createVcode', {groupId: this.groupId, eventId: this.eventId, vCode: this.newCode,})
+    },
+    verify() {
+      if (this.newCode === this.vCode){
+        this.$store.dispatch('updateAttendance', {groupId: this.groupId, eventId: this.eventId, status: 3, remark: null})
+        return false
+      } else {
+        this.wrongCode = true
+        return true
+      }
+    },
+    going() {
+      this.$store.dispatch('updateAttendance', {groupId: this.groupId, eventId: this.eventId, status: 1, remark: null})
+    },
+    notGoing() {
+      this.$store.dispatch('updateAttendance', {groupId: this.groupId, eventId: this.eventId, status: 2, remark: this.remark})
     },
   },
 }
@@ -197,10 +262,20 @@ export default {
 .button
   width: 40%
 
+.notgoing
+  width: 100%
+
 .attendance
   position: fixed
   bottom: 0px
   width: 100%
   margin: 0
+
+.indicator
+  position: fixed
+  bottom: 0px
+  width: 100%
+  color: white   
+  background-color: grey 
 </style>
 

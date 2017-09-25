@@ -56,7 +56,6 @@ const actions = {
   },
   deleteGroup({ commit }, { groupId }) {
     // TODO: check if user is owner of group
-
     // Delete group
     api('delete', '/group', { group_id: groupId })
 
@@ -77,13 +76,31 @@ const actions = {
       endTime,
       description,
       location,
+      alertTime,
     }
   ) {
     // Create group
     var startDateTime = new Date(startDate + 'T' + startTime + ':00').getTime()
-    var endDateTime = new Date(endDate + ' ' + endTime + ':00').getTime()
-    // console.log(startDate)
-    // console.log(startTime)
+    var endDateTime = new Date(endDate + 'T' + endTime + ':00').getTime()
+    var alert = null
+    switch (alertTime) {
+      case '10 minutes':
+        alert = 10
+        break
+      case '30 minutes':
+        alert = 30
+        break
+      case '1 hour':
+        alert = 60
+        break
+      case '2 hours':
+        alert = 120
+        break
+      case '1 day':
+        alert = 60 * 24
+    }
+    console.log(startDate)
+    console.log(startTime)
     console.log(startDateTime)
     console.log(groupId)
     console.log(name)
@@ -95,7 +112,7 @@ const actions = {
       end_date: endDateTime / 1000,
       description,
       location,
-      alert_time: '10',
+      alert_time: alert,
     })
 
     // Fetch group info
@@ -111,6 +128,7 @@ const actions = {
   async fetchEvents({ commit }, { groupId }) {
     // Fetch events in group
     const eventIds = await api('get', '/group/event', { group_id: groupId })
+    console.log(eventIds)
 
     // Fetch event info
     const eventInfos = await Promise.all(
@@ -119,6 +137,7 @@ const actions = {
     const events = eventInfos.map((info, i) => ({
       id: eventIds[i].event_id,
       ...info,
+      userList: null,
     }))
 
     console.log(events)
@@ -127,9 +146,36 @@ const actions = {
   },
   async fetchEvent({ commit }, { groupId, eventId }) {
     // Fetch event attendance
-    const { users } = await api('get', '/attendance', { event_id: eventId })
-
+    const users = await api('get', '/attendance', { event_id: eventId })
+    console.log(users)
     return commit('setEventAttendance', {
+      groupId,
+      eventId,
+      users,
+    })
+  },
+  async createVcode({ commit }, { groupId, eventId, vCode }) {
+    // Create group
+    const { event_id } = await api('patch', '/event', {
+      event_id: eventId,
+      v_code: vCode,
+    })
+
+    // Fetch group info
+    const event = await api('get', '/event', { event_id })
+
+    commit('setEvent', { groupId, eventId: event_id, event })
+    commit('setEventAttendance', {
+      groupId,
+      eventId: event_id,
+      users: null,
+    })
+  },
+  async updateAttendance({ commit }, { groupId, eventId, status, remark }) {
+    // post event attendance
+    await api('post', '/attendance', { event_id: eventId, status, remark })
+    const users = await api('get', '/attendance', { event_id: eventId })
+    commit('setEventAttendance', {
       groupId,
       eventId,
       users,
@@ -156,8 +202,12 @@ const mutations = {
   },
   setEventAttendance(state, { groupId, eventId, users }) {
     // users: [{ user_id, status }]
-    const events = state[groupId].events
-    Vue.set(events, eventId, { ...events[eventId], userList: users })
+    const userMap = {}
+    users.forEach(user => (userMap[user.user_id] = user))
+    const event = state[groupId].events[eventId]
+    console.log(event)
+    console.log(userMap)
+    Vue.set(event, 'userList', userMap)
   },
   setGroup(state, { groupId, group }) {
     // group: { text, name, pic_url, description }
