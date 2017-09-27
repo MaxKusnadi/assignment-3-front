@@ -22,13 +22,6 @@
 export default {}
 </script>
 
-<style lang="stylus" scoped>
-.loader
-  background-image: url(/static/img/bg.jpg)
-  background-size: cover
-  min-height 100vh
-</style>
-
 <style lang="css" scoped>
 .cssload-dots {
 	width: 0;

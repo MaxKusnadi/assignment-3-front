@@ -1,15 +1,10 @@
 <template>
-  <v-fade-transition v-if="user.loggedIn == null">
-    <v-app>
-      <loader />
-    </v-app>
-  </v-fade-transition>
-  <v-fade-transition v-else-if="user.loggedIn == false">
+  <v-fade-transition v-if="!user.loggedIn">
     <v-app>
       <login />
     </v-app>
   </v-fade-transition>
-  <v-fade-transition v-else-if="(Object.values(groups)).length == 0 && user.tut">
+  <v-fade-transition v-else-if="!hasGroups && user.tut">
     <tutorial />
   </v-fade-transition>
   <v-app toolbar v-else>
@@ -68,7 +63,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import Loader from '@/components/Loader'
 import Login from '@/components/Login'
 import GroupList from '@/components/GroupList'
 import Tutorial from '@/components/Tutorial'
@@ -86,8 +80,8 @@ export default {
 
   computed: {
     ...mapState(['user']),
-    groups: function() {
-      return this.$store.state.groups
+    hasGroups: function() {
+      return Object.keys(this.$store.state.groups).length !== 0
     },
   },
 
@@ -138,7 +132,6 @@ export default {
   },
 
   components: {
-    Loader,
     Login,
     GroupList,
     Tutorial,

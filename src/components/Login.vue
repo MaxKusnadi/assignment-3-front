@@ -1,6 +1,7 @@
 <template>
   <div class="login">
-    <v-layout column wrap class="text-xs-center login">
+    <loader v-if="user.loggedIn == null" />
+    <v-layout v-else column wrap class="text-xs-center login">
       <div class="logo">
         <img alt="Golah" src="/static/img/logo.png" />
       </div>
@@ -22,6 +23,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import Loader from '@/components/Loader'
+
 export default {
   data() {
     return {
@@ -30,6 +34,10 @@ export default {
         return_scopes: true,
       },
     }
+  },
+
+  computed: {
+    ...mapState(['user']),
   },
 
   methods: {
@@ -42,6 +50,10 @@ export default {
       console.log(err)
     },
   },
+
+  components: {
+    Loader,
+  },
 }
 </script>
 
@@ -49,6 +61,7 @@ export default {
 .login
   background-image url(/static/img/bg.jpg)
   background-size cover
+  background-position 50% 50%
   position fixed
   left 0
   right 0
