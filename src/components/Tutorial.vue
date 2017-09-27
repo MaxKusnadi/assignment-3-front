@@ -27,8 +27,7 @@ export default {
     this.$store.dispatch('fetchGroups')
   },
   data() {
-    return {
-    }
+    return {}
   },
   methods: {
     finish() {

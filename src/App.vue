@@ -109,17 +109,18 @@ export default {
       // } catch (err) {
       //   console.log('Oops, unable to copy')
       // }
-      var link = 'http://cs3216-assignment-3.surge.sh' + this.$router.currentRoute.path
-      var dummy = document.createElement("input");
-     
-      document.body.appendChild(dummy);
-  
-      dummy.setAttribute("id", "dummy_id");
-   
+      var link =
+        'http://cs3216-assignment-3.surge.sh' + this.$router.currentRoute.path
+      var dummy = document.createElement('input')
+
+      document.body.appendChild(dummy)
+
+      dummy.setAttribute('id', 'dummy_id')
+
       dummy.setAttribute('value', link)
 
-      dummy.select();
-      document.execCommand("copy");
+      dummy.select()
+      document.execCommand('copy')
       document.body.removeChild(dummy)
     },
   },

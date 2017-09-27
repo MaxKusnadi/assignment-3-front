@@ -53,7 +53,7 @@ export default {
 
   data() {
     return {
-      dialog: false
+      dialog: false,
     }
   },
 
@@ -84,7 +84,7 @@ export default {
   methods: {
     moment,
     deleteGroup() {
-      this.$store.dispatch('deleteGroup', {groupId: this.groupId})
+      this.$store.dispatch('deleteGroup', { groupId: this.groupId })
       this.$router.push('/')
     },
   },

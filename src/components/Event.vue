@@ -143,7 +143,6 @@ export default {
       groupId: this.groupId,
       eventId: this.eventId,
     })
-
   },
 
   data() {
@@ -190,11 +189,15 @@ export default {
     goingOnes: function() {
       console.log(this.event.userList)
       if (this.event.userList == null) return []
-      return Object.values(this.event.userList).filter(user => user.status === 1)
+      return Object.values(this.event.userList).filter(
+        user => user.status === 1
+      )
     },
     notGoingOnes: function() {
       if (this.event.userList == null) return []
-      return Object.values(this.event.userList).filter(user => user.status === 2)
+      return Object.values(this.event.userList).filter(
+        user => user.status === 2
+      )
     },
     admin: function() {
       var myId = this.$store.state.user.fb_id
@@ -213,20 +216,29 @@ export default {
         return 0
       }
       // var myId = this.$store.state.user.fb_id
-      
+
       // var me = this.event.userList[myId]
       // return me.status
       return 0
-    }
+    },
   },
 
   methods: {
     submit() {
-      this.$store.dispatch('createVcode', {groupId: this.groupId, eventId: this.eventId, vCode: this.newCode,})
+      this.$store.dispatch('createVcode', {
+        groupId: this.groupId,
+        eventId: this.eventId,
+        vCode: this.newCode,
+      })
     },
     verify() {
-      if (this.newCode === this.vCode){
-        this.$store.dispatch('updateAttendance', {groupId: this.groupId, eventId: this.eventId, status: 3, remark: null})
+      if (this.newCode === this.vCode) {
+        this.$store.dispatch('updateAttendance', {
+          groupId: this.groupId,
+          eventId: this.eventId,
+          status: 3,
+          remark: null,
+        })
         return false
       } else {
         this.wrongCode = true
@@ -234,10 +246,20 @@ export default {
       }
     },
     going() {
-      this.$store.dispatch('updateAttendance', {groupId: this.groupId, eventId: this.eventId, status: 1, remark: null})
+      this.$store.dispatch('updateAttendance', {
+        groupId: this.groupId,
+        eventId: this.eventId,
+        status: 1,
+        remark: null,
+      })
     },
     notGoing() {
-      this.$store.dispatch('updateAttendance', {groupId: this.groupId, eventId: this.eventId, status: 2, remark: this.remark})
+      this.$store.dispatch('updateAttendance', {
+        groupId: this.groupId,
+        eventId: this.eventId,
+        status: 2,
+        remark: this.remark,
+      })
     },
   },
 }
