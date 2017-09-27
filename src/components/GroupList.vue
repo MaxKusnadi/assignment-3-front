@@ -22,11 +22,9 @@
         </v-card>
       </v-flex>
     </v-layout>
-    <div class="button-wrapper">
-      <v-btn absolute fab top right @click="$router.push(`/createGroup/`)">
-        <icon name="plus"></icon>
-      </v-btn>
-    </div>
+    <v-btn fixed fab bottom right @click="$router.push(`/createGroup/`)">
+      <icon name="plus"></icon>
+    </v-btn>
   </v-container>
 </template>
 
@@ -35,7 +33,7 @@ import { mapState } from 'vuex'
 
 export default {
   mounted() {
-    this.$store.dispatch('fetchEvents')
+    this.$store.dispatch('fetchGroups')
   },
 
   computed: {

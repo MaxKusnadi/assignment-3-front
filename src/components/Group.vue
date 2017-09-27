@@ -1,24 +1,26 @@
 <template>
   <v-container fluid>
-    <v-list two-line subheader>
-      <v-subheader>Upcoming</v-subheader>
-      <v-list-tile v-for="event in upcomingEvents" :key="event.id" @click="$router.push(`/g/${groupId}/${event.id}/`)">
-        <v-list-tile-content>
-          <v-list-tile-title v-text="event.name"></v-list-tile-title>
-          <v-list-tile-sub-title v-text="moment(event.dateTime).format('dddd, DD MMMM')"></v-list-tile-sub-title>
-        </v-list-tile-content>
-      </v-list-tile>
-    </v-list>
-    <v-divider></v-divider>
-    <v-list two-line subheader>
-      <v-subheader>Completed</v-subheader>
-      <v-list-tile v-for="event in completedEvents" :key="event.id" @click="$router.push(`/g/${groupId}/${event.id}/`)">
-        <v-list-tile-content>
-          <v-list-tile-title v-text="event.name"></v-list-tile-title>
-          <v-list-tile-sub-title v-text="moment(event.dateTime).format('dddd, DD MMMM')"></v-list-tile-sub-title>
-        </v-list-tile-content>
-      </v-list-tile>
-    </v-list>
+    <div class="elevation-2">
+      <v-list two-line subheader>
+        <v-subheader>Upcoming</v-subheader>
+        <v-list-tile v-for="event in upcomingEvents" :key="event.id" @click="$router.push(`/g/${groupId}/${event.id}/`)">
+          <v-list-tile-content>
+            <v-list-tile-title v-text="event.name"></v-list-tile-title>
+            <v-list-tile-sub-title v-text="moment(event.dateTime).format('dddd, DD MMMM')"></v-list-tile-sub-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+      <v-divider></v-divider>
+      <v-list two-line subheader>
+        <v-subheader>Completed</v-subheader>
+        <v-list-tile v-for="event in completedEvents" :key="event.id" @click="$router.push(`/g/${groupId}/${event.id}/`)">
+          <v-list-tile-content>
+            <v-list-tile-title v-text="event.name"></v-list-tile-title>
+            <v-list-tile-sub-title v-text="moment(event.dateTime).format('dddd, DD MMMM')"></v-list-tile-sub-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </div>
     <div class="button-wrapper">
       <v-btn absolute fab top right @click="$router.push(`/g/${groupId}/createEvent/`)">
         <icon name="plus"></icon>
@@ -30,7 +32,7 @@
         <v-card-text>
           <div>Are you sure you want to delete this group and all the group events?</div>
         </v-card-text>
-        <v-card-actions> 
+        <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn class="blue--text darken-1" flat @click.native="dialog = false" @click="deleteGroup">Yes</v-btn>
           <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Cancel</v-btn>
