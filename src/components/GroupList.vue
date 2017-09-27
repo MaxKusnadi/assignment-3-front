@@ -2,15 +2,18 @@
   <v-container fluid grid-list-md >
     <v-layout row wrap>
       <v-flex
-        xs12 sm6 md4
+        xs12 md6
         v-for="group in Object.values(groups)"
         :key="group.groupId"
         @click="$router.push(`/g/${group.groupId}/`)"
       >
-        <v-card class="group">
+        <v-card
+          class="group"
+          hover
+        >
           <v-card-media
             :src="group.pic_url || ''" alt=""
-            height="200px"
+            height="300px"
           >
           </v-card-media>
           <v-card-title primary-title>
@@ -48,10 +51,6 @@ export default {
 .group
   cursor pointer
   transition all 0.2s
-
-.group:hover
-  transform translateY(-1px)
-  box-shadow 0 2px 5px rgba(0, 0, 0, 0.5)
 
 .button-wrapper
   position: relative
