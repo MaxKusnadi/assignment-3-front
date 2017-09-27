@@ -186,6 +186,9 @@ const actions = {
 const mutations = {
   setGroupList(state, { groups }) {
     // group: { text, name, pic_url, description }
+    Object.keys(groups).forEach(key => {
+      delete state[key]
+    })
     groups.forEach(group => Vue.set(state, group.groupId, group))
   },
   setGroupEvents(state, { groupId, events }) {

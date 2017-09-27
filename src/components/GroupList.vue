@@ -31,6 +31,10 @@
 import { mapState } from 'vuex'
 
 export default {
+  mounted() {
+    this.$store.dispatch('fetchEvents')
+  },
+
   computed: {
     ...mapState(['groups']),
   },
