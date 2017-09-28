@@ -14,7 +14,7 @@
       </v-btn>
       <v-toolbar-title>Golah</v-toolbar-title>
       <v-spacer></v-spacer>
-       <v-dialog v-model="dialog" persistent>
+      <v-dialog v-model="dialog" persistent>
         <v-btn icon slot="activator" @click="copyLink">
           <v-icon>share</v-icon>
         </v-btn>
@@ -96,29 +96,21 @@ export default {
       this.$store.dispatch('notLoggedIn')
     },
     copyLink() {
-      // var copyTextarea = document.querySelector('.copiedLink')
-      // copyTextarea.select()
-
-      // try {
-      //   var successful = document.execCommand('copy')
-      //   var msg = successful ? 'successful' : 'unsuccessful'
-      //   console.log('Copying text command was ' + msg)
-      // } catch (err) {
-      //   console.log('Oops, unable to copy')
-      // }
+      console.log("im in")
       var link =
         'http://cs3216-assignment-3.surge.sh' + this.$router.currentRoute.path
       var dummy = document.createElement('input')
-
+      console.log("createlement")
       document.body.appendChild(dummy)
 
       dummy.setAttribute('id', 'dummy_id')
 
       dummy.setAttribute('value', link)
-
+      console.log("setattriute")
       dummy.select()
       document.execCommand('copy')
       document.body.removeChild(dummy)
+      console.log("finish")
     },
   },
 

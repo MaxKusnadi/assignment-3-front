@@ -48,54 +48,93 @@
       </v-list-tile>
     </v-list>
     <v-list>
-      <v-list-group v-for="item in items" v-bind:key="item.title">
+      <v-list-group>
         <v-list-tile slot="item">
           <v-list-tile-action>
-            <v-icon class="indigo--text">{{ item.icon }}</v-icon>
+            <v-icon class="indigo--text">mood</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            <v-list-tile-title>Going</v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-action>
             <v-icon>keyboard_arrow_down</v-icon>
           </v-list-tile-action>
         </v-list-tile>
-        <v-list-tile v-for="member in item.members" v-bind:key="member.name">
+        <v-list-tile v-for="user in goingOnes" v-bind:key="user.first_name">
+          <v-list-tile-avatar>
+              <img :src="`//graph.facebook.com/v2.10/${user.fb_Id}/picture`" :alt="`${user.first_name}`">
+            </v-list-tile-avatar>
           <v-list-tile-content>
-            <v-list-tile-title v-text="member.name"></v-list-tile-title>
+            <v-list-tile-title>{{user.first_name}} {{user.last_name}}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list-group>
+      <v-list-group>
+        <v-list-tile slot="item">
+          <v-list-tile-action>
+            <v-icon class="indigo--text">mood_bad</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Not Going</v-list-tile-title>
+          </v-list-tile-content>
+          <v-list-tile-action>
+            <v-icon>keyboard_arrow_down</v-icon>
+          </v-list-tile-action>
+        </v-list-tile>
+        <v-list-tile v-for="user in notGoingOnes" v-bind:key="user.first_name">
+          <v-list-tile-avatar>
+              <img :src="`//graph.facebook.com/v2.10/${user.fb_Id}/picture`" :alt="`${user.first_name}`">
+            </v-list-tile-avatar>
+          <v-list-tile-content>
+            <v-list-tile-title>{{user.first_name}} {{user.last_name}}</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list-group>
     </v-list>
     <div v-if='admin'>
-      <v-dialog v-model="dialog" persistent>
-        <v-btn primary dark large slot="activator" class="attendance">Take Attendance</v-btn>
-        <v-card v-if='vCode==null'> 
-          <v-card-text>
-            <v-text-field v-model="newCode" label="Create verification code"></v-text-field>
-            <small>*Participants have to key in this code to indicate attendance</small>
-          </v-card-text>
-          <v-card-actions> 
-            <v-spacer></v-spacer>
-            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
-            <v-btn class="blue--text darken-1" flat @click.native="dialog = false" @click="submit">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-        <v-card v-else> 
-          <v-card-text>
-            <div>Verification code: {{vCode}}</div>
-          </v-card-text>
-          <v-card-actions> 
-            <v-spacer></v-spacer>
-            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
-            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+      <div class="buttons">
+        <v-dialog class="adminbutton" v-model="dialog" persistent>
+          <v-btn primary dark large slot="activator" class="notgoing">Take Attendance</v-btn>
+          <v-card v-if='vCode==null'> 
+            <v-card-text>
+              <v-text-field v-model="newCode" label="Create verification code"></v-text-field>
+              <small>*Participants have to key in this code to indicate attendance</small>
+            </v-card-text>
+            <v-card-actions> 
+              <v-spacer></v-spacer>
+              <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
+              <v-btn class="blue--text darken-1" flat @click.native="dialog = false" @click="submit">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+          <v-card v-else> 
+            <v-card-text>
+              <div>Verification code: {{vCode}}</div>
+            </v-card-text>
+            <v-card-actions> 
+              <v-spacer></v-spacer>
+              <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
+              <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-dialog class="adminbutton" v-model="dialog2" persistent>
+          <v-btn error dark large class="notgoing" slot="activator">Delete event</v-btn>
+          <v-card>
+            <v-card-text>
+              <div>Are you sure you want to delete this event?</div>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn class="blue--text darken-1" flat @click.native="dialog2 = false" @click="deleteEvent">Yes</v-btn>
+              <v-btn class="blue--text darken-1" flat @click.native="dialog2 = false">Cancel</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </div>
     </div> 
       
     <div v-else>
-      <div class="buttons" v-if="status==0">
+      <div class="buttons" v-if="status==='0'">
         <v-btn primary dark large class="button" @click="going">Going</v-btn>
         <v-dialog class="button" v-model="dialog" persistent>
           <v-btn error dark large slot="activator" class="notgoing">Not Going</v-btn>
@@ -110,7 +149,9 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-       
+      </div>
+      <div v-else-if="status===3" class="indicator">
+        <div>Attend</div>
       </div>
       <v-dialog v-else-if="vCode" v-model="dialog" persistent>
         <v-btn primary dark large slot="activator" class="attendance">I'm here</v-btn>
@@ -123,13 +164,13 @@
           <v-card-actions> 
             <v-spacer></v-spacer>
             <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
-            <v-btn class="blue--text darken-1" flat @click.native="dialog = verify">OK</v-btn>
+            <v-btn class="blue--text darken-1" flat @click="verify">OK</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
       <div v-else class="indicator">
-        <div v-if="status==1">I will go</div>
-        <div v-if="status==2">I will not go</div>
+        <div v-if="status===1">I'm going</div>
+        <div v-else>Not going</div>
       </div>
       
     </div>
@@ -149,20 +190,9 @@ export default {
     return {
       dialog: false,
       newCode: null,
-      items: [
-        {
-          icon: 'mood',
-          title: 'Going',
-          members: this.goingOnes,
-        },
-        {
-          icon: 'mood_bad',
-          title: 'Not Going',
-          members: this.notGoingones,
-        },
-      ],
       remark: null,
       wrongCode: false,
+      dialog2: false,
     }
   },
 
@@ -188,9 +218,11 @@ export default {
     },
     goingOnes: function() {
       console.log(this.event.userList)
+      console.log(Object.values(this.event.userList).filter(
+        user => user.status === 3))
       if (this.event.userList == null) return []
       return Object.values(this.event.userList).filter(
-        user => user.status === 1
+        user => user.status === 3
       )
     },
     notGoingOnes: function() {
@@ -200,50 +232,60 @@ export default {
       )
     },
     admin: function() {
-      var myId = this.$store.state.user.fb_id
-      var creatorId = this.group.creator_id
-      if (myId === creatorId) {
+      var myId = this.$store.state.user.fbId
+      var creatorId = this.group.creator_fb_id
+      console.log(myId)
+      console.log(creatorId)
+      console.log(myId.toString() === creatorId.toString())
+      if (myId.toString() === creatorId.toString()) {
         return true
       } else {
         return false
       }
     },
     vCode: function() {
-      return this.event.vCode
+      if (this.admin) {
+        return this.event.verification_code
+      } else {
+        return this.event.has_verification_code
+      }
     },
     status: function() {
       if (this.event.userList == null) {
         return 0
       }
-      // var myId = this.$store.state.user.fb_id
-
-      // var me = this.event.userList[myId]
-      // return me.status
-      return 0
+      var myId = this.$store.state.user.fbId
+      var me = this.event.userList[myId]
+      console.log(me.status)
+      return me.status
     },
   },
 
   methods: {
+    verify() {
+      this.$store.dispatch('takeAttendance', {
+        groupId: this.groupId,
+        eventId: this.eventId,
+        vCode: this.newCode,
+        }).then(response => {
+          console.log("Got some data, now lets show something in this component")
+          console.log(response)
+          if (response.toString() === "true") {
+            console.log(response)
+            this.dialog = false 
+          } else {
+            console.log(response)
+            this.dialog = true
+            this.wrongCode = true
+          }
+      })   
+    },
     submit() {
       this.$store.dispatch('createVcode', {
         groupId: this.groupId,
         eventId: this.eventId,
         vCode: this.newCode,
       })
-    },
-    verify() {
-      if (this.newCode === this.vCode) {
-        this.$store.dispatch('updateAttendance', {
-          groupId: this.groupId,
-          eventId: this.eventId,
-          status: 3,
-          remark: null,
-        })
-        return false
-      } else {
-        this.wrongCode = true
-        return true
-      }
     },
     going() {
       this.$store.dispatch('updateAttendance', {
@@ -260,6 +302,11 @@ export default {
         status: 2,
         remark: this.remark,
       })
+    },
+
+    deleteEvent() {
+      this.$store.dispatch('deleteEvent', { groupId: this.groupId, eventId: this.eventId })
+      this.$router.push('/')
     },
   },
 }
@@ -284,17 +331,23 @@ export default {
 .button
   width: 40%
 
+.adminbutton 
+  width: 47%
+
 .notgoing
   width: 100%
+  margin: 0
 
 .attendance
   position: fixed
   bottom: 0px
-  width: 100%
+  width: 50%
   margin: 0
 
 .indicator
   position: fixed
+  font-size: 20px
+  text-align: center
   bottom: 0px
   width: 100%
   color: white   

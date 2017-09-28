@@ -154,21 +154,39 @@ const actions = {
       users,
     })
   },
+  async deleteEvent({ commit }, { groupId, eventId }) {
+    api('delete', '/event', { event_id: eventId })
+    const eventIds = await api('get', '/group/event', { group_id: groupId })
+    const eventInfos = await Promise.all(
+      eventIds.map(event => api('get', '/event', { event_id: event.event_id }))
+    )
+    const events = eventInfos.map((info, i) => ({
+      id: eventIds[i].event_id,
+      ...info,
+      userList: null,
+    }))
+
+    console.log(events)
+
+    return commit('setGroupEvents', { groupId, events })
+  },
   async createVcode({ commit }, { groupId, eventId, vCode }) {
     // Create group
-    const { event_id } = await api('patch', '/event', {
+    const { event_id } = await api('PATCH', '/event', {
       event_id: eventId,
-      v_code: vCode,
+      verification_code: vCode,
     })
 
     // Fetch group info
     const event = await api('get', '/event', { event_id })
+    const users = await api('get', '/attendance', { event_id: eventId })
 
     commit('setEvent', { groupId, eventId: event_id, event })
+
     commit('setEventAttendance', {
       groupId,
       eventId: event_id,
-      users: null,
+      users,
     })
   },
   async updateAttendance({ commit }, { groupId, eventId, status, remark }) {
@@ -180,6 +198,23 @@ const actions = {
       eventId,
       users,
     })
+  },
+  async takeAttendance({ commit }, { groupId, eventId, vCode }) {
+    // post event attendance
+    const res = await api('post', '/me/event', {
+      event_id: eventId,
+      verification_code: vCode,
+    })
+    if (res.is_code_correct) {
+      const users = await api('get', '/attendance', { event_id: eventId })
+      commit('setEventAttendance', {
+        groupId,
+        eventId,
+        users,
+      })
+      return true
+    }
+    return false
   },
 }
 
@@ -206,7 +241,7 @@ const mutations = {
   setEventAttendance(state, { groupId, eventId, users }) {
     // users: [{ user_id, status }]
     const userMap = {}
-    users.forEach(user => (userMap[user.user_id] = user))
+    users.forEach(user => (userMap[user.fb_id] = user))
     const event = state[groupId].events[eventId]
     console.log(event)
     console.log(userMap)
