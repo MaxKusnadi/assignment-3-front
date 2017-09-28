@@ -59,7 +59,7 @@ export default {
 
 <style lang="stylus" scoped>
 .login
-  background-image url(/static/img/bg.jpg)
+  background-image url(/static/img/bg.webp)
   background-size cover
   background-position 50% 50%
   position fixed
