@@ -1,57 +1,47 @@
 <template>
-  <div>
-    <v-list class='container'>
-      <v-list-tile>
+  <v-card>
+    <v-card-media :src="group.pic_url || ''" alt="" height="300px">
+      <v-layout column class="media">
+        <v-spacer></v-spacer>
+        <v-card-title class="white--text pt-5">
+          <div class="display-1 pt-5">{{event.name}}</div>
+        </v-card-title>
+      </v-layout>
+    </v-card-media>
+    <v-list subheader two-line>
+      <v-list-tile tag="div" :ripple="false">
         <v-list-tile-action>
-          <v-icon class="indigo--text">event</v-icon>
+          <v-icon>access_time</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
-          <v-list-tile-title>{{event.name}}</v-list-tile-title>
+          <v-list-tile-title>{{startDate}}</v-list-tile-title>
+          <v-list-tile-sub-title>{{startTime}} - {{endTime}}</v-list-tile-sub-title>
         </v-list-tile-content>
       </v-list-tile>
-      <v-divider inset></v-divider>
-      <v-list-tile class="startDate">
+      <v-list-tile tag="div" :ripple="false">
         <v-list-tile-action>
-          <v-icon class="indigo--text">access_time</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>from {{startDate}}</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile>
-        <v-list-tile-action>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>to {{endDate}}</v-list-tile-title>
-          <v-list-tile-sub-title>Data and time</v-list-tile-sub-title>
-        </v-list-tile-content>
-      </v-list-tile>
-      <v-divider inset></v-divider>
-      <v-list-tile>
-        <v-list-tile-action>
-          <v-icon class="indigo--text">location_on</v-icon>
+          <v-icon>location_on</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
           <v-list-tile-title>{{event.location}}</v-list-tile-title>
-          <v-list-tile-sub-title>Location</v-list-tile-sub-title>
         </v-list-tile-content>
       </v-list-tile>
-      <v-divider inset></v-divider>
-      <v-list-tile>
+      <v-list-tile tag="div" :ripple="false">
         <v-list-tile-action>
-          <v-icon class="indigo--text">description</v-icon>
+          <v-icon>description</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
           <v-list-tile-title>{{event.description}}</v-list-tile-title>
-          <v-list-tile-sub-title>Event description</v-list-tile-sub-title>
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
-    <v-list>
+    <v-divider></v-divider>
+    <v-list subheader>
+      <v-subheader>Attendees</v-subheader>
       <v-list-group v-for="item in items" v-bind:key="item.title">
         <v-list-tile slot="item">
           <v-list-tile-action>
-            <v-icon class="indigo--text">{{ item.icon }}</v-icon>
+            <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
@@ -70,48 +60,48 @@
     <div v-if='admin'>
       <v-dialog v-model="dialog" persistent>
         <v-btn primary dark large slot="activator" class="attendance">Take Attendance</v-btn>
-        <v-card v-if='vCode==null'> 
+        <v-card v-if='vCode==null'>
           <v-card-text>
             <v-text-field v-model="newCode" label="Create verification code"></v-text-field>
             <small>*Participants have to key in this code to indicate attendance</small>
           </v-card-text>
-          <v-card-actions> 
+          <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
             <v-btn class="blue--text darken-1" flat @click.native="dialog = false" @click="submit">Save</v-btn>
           </v-card-actions>
         </v-card>
-        <v-card v-else> 
+        <v-card v-else>
           <v-card-text>
             <div>Verification code: {{vCode}}</div>
           </v-card-text>
-          <v-card-actions> 
+          <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
             <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Save</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </div> 
-      
+    </div>
+
     <div v-else>
       <div class="buttons" v-if="status==0">
-        <v-btn primary dark large class="button" @click="going">Going</v-btn>
+        <v-btn success dark large class="button" @click="going">I'm Going!</v-btn>
         <v-dialog class="button" v-model="dialog" persistent>
-          <v-btn error dark large slot="activator" class="notgoing">Not Going</v-btn>
+          <v-btn error dark large slot="activator" class="notgoing">Can't make it.</v-btn>
           <v-card>
             <v-card-text>
               <v-text-field v-model="remark" label="Remark"></v-text-field>
             </v-card-text>
-            <v-card-actions> 
+            <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Cancel</v-btn>
-              <v-btn class="blue--text darken-1" flat @click.native="dialog = false" @click="notGoing">OK</v-btn>
+              <v-btn class="blue--text darken-1" flat @click.native="dialog = false" @click="notGoing">Not Going</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-       
       </div>
+
       <v-dialog v-else-if="vCode" v-model="dialog" persistent>
         <v-btn primary dark large slot="activator" class="attendance">I'm here</v-btn>
         <v-card>
@@ -120,23 +110,26 @@
             <small v-if="wrongCode">*Invalid code </small>
             <small v-else>*enter the verification code that you get from the group admin </small>
           </v-card-text>
-          <v-card-actions> 
+          <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
             <v-btn class="blue--text darken-1" flat @click.native="dialog = verify">OK</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
+
       <div v-else class="indicator">
-        <div v-if="status==1">I will go</div>
-        <div v-if="status==2">I will not go</div>
+        <div v-if="status==1">I'm going</div>
+        <div v-if="status==2">I can't make it</div>
       </div>
-      
+
     </div>
-  </div>
-</template> 
+  </v-card>
+</template>
 
 <script>
+import moment from 'moment'
+
 export default {
   mounted() {
     this.$store.dispatch('fetchEvent', {
@@ -170,24 +163,23 @@ export default {
 
   computed: {
     group: function() {
-      console.log(this.$store.state.groups[this.groupId])
       return this.$store.state.groups[this.groupId]
     },
     event: function() {
-      console.log(this.group.events[this.eventId])
-      console.log(this.group.events[this.eventId].userList)
       return this.group.events[this.eventId]
     },
     startDate: function() {
-      var datetime = new Date(parseInt(this.event.start_date) * 1000)
-      return datetime.toLocaleString()
+      return moment(parseInt(this.event.start_date) * 1000).format(
+        'dddd, DD MMMM'
+      )
     },
-    endDate: function() {
-      var datetime = new Date(parseInt(this.event.end_date) * 1000)
-      return datetime.toLocaleString()
+    startTime: function() {
+      return moment(parseInt(this.event.start_date) * 1000).format('hh:mm')
+    },
+    endTime: function() {
+      return moment(parseInt(this.event.end_date) * 1000).format('hh:mm')
     },
     goingOnes: function() {
-      console.log(this.event.userList)
       if (this.event.userList == null) return []
       return Object.values(this.event.userList).filter(
         user => user.status === 1
@@ -269,15 +261,9 @@ export default {
 .router-view
   width: 100%
 
-.container
-  padding-top: 20px
-  padding-bottom: 20px
-.startDate
-  height: 30px
-
 .buttons
   position: fixed
-  bottom: 20px
+  bottom: 16px
   width: 100%
   text-align: center
 
@@ -297,7 +283,10 @@ export default {
   position: fixed
   bottom: 0px
   width: 100%
-  color: white   
-  background-color: grey 
-</style>
+  color: white
+  background-color: grey
 
+.media
+  height: 100%
+  margin: 0
+</style>

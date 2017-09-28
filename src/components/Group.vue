@@ -34,8 +34,8 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn class="blue--text darken-1" flat @click.native="dialog = false" @click="deleteGroup">Yes</v-btn>
           <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Cancel</v-btn>
+          <v-btn class="blue--text darken-1" flat @click.native="dialog = false" @click="deleteGroup">Delete</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -105,7 +105,9 @@ export default {
 
 .deleteGroup
   position: fixed
-  bottom: 0px
-  width: 100%
-  margin: 0
+  bottom: 16px
+  width: 80%
+  margin: auto
+  left: 0
+  right: 0
 </style>
