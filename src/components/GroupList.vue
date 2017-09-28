@@ -22,7 +22,7 @@
         </v-card>
       </v-flex>
     </v-layout>
-    <v-btn fixed fab bottom right @click="$router.push(`/createGroup/`)">
+    <v-btn dark :class="accent" fixed fab bottom right @click="$router.push(`/createGroup/`)">
       <icon name="plus"></icon>
     </v-btn>
   </v-container>
@@ -37,7 +37,10 @@ export default {
   },
 
   computed: {
-    ...mapState(['groups']),
+    ...mapState({
+      groups: state => state.groups,
+      accent: state => state.settings.accent,
+    }),
   },
 }
 </script>

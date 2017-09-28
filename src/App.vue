@@ -8,7 +8,7 @@
     <tutorial />
   </v-fade-transition>
   <v-app toolbar v-else>
-    <v-toolbar fixed>
+    <v-toolbar fixed dark :class="primary">
       <v-btn icon v-if="history.length !== 0" :to="history[history.length - 1]">
         <v-icon>arrow_back</v-icon>
       </v-btn>
@@ -22,7 +22,7 @@
           <v-card-text>
             <div>the link has been copied to your clipboard</div>
           </v-card-text>
-          <v-card-actions> 
+          <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn class="blue--text darken-1" flat @click.native="dialog = false">OK</v-btn>
           </v-card-actions>
@@ -79,7 +79,10 @@ export default {
   props: ['title'],
 
   computed: {
-    ...mapState(['user']),
+    ...mapState({
+      user: state => state.user,
+      primary: state => state.settings.primary,
+    }),
     hasGroups: function() {
       return Object.keys(this.$store.state.groups).length !== 0
     },

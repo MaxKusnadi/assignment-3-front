@@ -22,7 +22,7 @@
       </v-list>
     </div>
     <div class="button-wrapper">
-      <v-btn absolute fab top right @click="$router.push(`/g/${groupId}/createEvent/`)">
+      <v-btn dark :class="accent" absolute fab top right @click="$router.push(`/g/${groupId}/createEvent/`)">
         <icon name="plus"></icon>
       </v-btn>
     </div>
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import moment from 'moment'
 
 export default {
@@ -62,9 +63,12 @@ export default {
   props: ['groupId'],
 
   computed: {
-    group: function() {
-      return this.$store.state.groups[this.groupId]
-    },
+    ...mapState({
+      group(state) {
+        return state.groups[this.groupId]
+      },
+      accent: state => state.settings.accent,
+    }),
     upcomingEvents: function() {
       if (this.group.events == null) return []
 

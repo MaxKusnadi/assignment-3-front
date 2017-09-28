@@ -1,6 +1,8 @@
 const state = {
   notifications: true,
   nightMode: false,
+  primary: 'teal',
+  accent: 'pink accent-2',
 }
 
 const getters = {}
