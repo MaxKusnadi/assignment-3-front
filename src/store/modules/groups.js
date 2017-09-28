@@ -16,7 +16,7 @@ const actions = {
 
     // Fetch group info
     const groupInfos = await Promise.all(
-      groupIds.map(group => api('get', `/group/${group.group_Id}`))
+      groupIds.map(group => api('get', `/group/${group.group_id}`))
     )
 
     const groups = groupInfos.map((info, i) => ({
