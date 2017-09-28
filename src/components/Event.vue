@@ -41,7 +41,7 @@
       <v-list-group>
         <v-list-tile slot="item">
           <v-list-tile-action>
-            <v-icon>mood</v-icon>
+            <v-icon class="green--text">mood</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Going</v-list-tile-title>
@@ -62,7 +62,7 @@
       <v-list-group>
         <v-list-tile slot="item">
           <v-list-tile-action>
-            <v-icon class="indigo--text">mood_bad</v-icon>
+            <v-icon class="red--text">mood_bad</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Not Going</v-list-tile-title>
@@ -85,22 +85,22 @@
       <div class="buttons">
         <v-dialog class="adminbutton" v-model="dialog" persistent>
           <v-btn primary dark large slot="activator" class="notgoing">Take Attendance</v-btn>
-          <v-card v-if='vCode==null'> 
+          <v-card v-if='vCode==null'>
             <v-card-text>
               <v-text-field v-model="newCode" label="Create verification code"></v-text-field>
               <small>*Participants have to key in this code to indicate attendance</small>
             </v-card-text>
-            <v-card-actions> 
+            <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
               <v-btn class="blue--text darken-1" flat @click.native="dialog = false" @click="submit">Save</v-btn>
             </v-card-actions>
           </v-card>
-          <v-card v-else> 
+          <v-card v-else>
             <v-card-text>
               <div>Verification code: {{vCode}}</div>
             </v-card-text>
-            <v-card-actions> 
+            <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
               <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Save</v-btn>
@@ -121,7 +121,7 @@
           </v-card>
         </v-dialog>
       </div>
-    </div> 
+    </div>
     <div v-else>
       <div class="buttons" v-if="status==0">
         <v-btn success dark large class="button" @click="going">I'm Going!</v-btn>
@@ -262,13 +262,13 @@ export default {
           console.log(response)
           if (response.toString() === "true") {
             console.log(response)
-            this.dialog = false 
+            this.dialog = false
           } else {
             console.log(response)
             this.dialog = true
             this.wrongCode = true
           }
-      })   
+      })
     },
     submit() {
       this.$store.dispatch('createVcode', {
@@ -315,7 +315,7 @@ export default {
 .button
   width: 40%
 
-.adminbutton 
+.adminbutton
   width: 47%
 
 .notgoing
