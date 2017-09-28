@@ -99,11 +99,6 @@ const actions = {
       case '1 day':
         alert = 60 * 24
     }
-    console.log(startDate)
-    console.log(startTime)
-    console.log(startDateTime)
-    console.log(groupId)
-    console.log(name)
 
     const { event_id } = await api('post', '/event', {
       start_date: startDateTime / 1000,
@@ -127,8 +122,7 @@ const actions = {
   },
   async fetchEvents({ commit }, { groupId }) {
     // Fetch events in group
-    const eventIds = await api('get', '/group/event', { group_id: groupId })
-    console.log(eventIds)
+    const eventIds = await api('get', `/group/${groupId}/event`)
 
     // Fetch event info
     const eventInfos = await Promise.all(
@@ -140,14 +134,11 @@ const actions = {
       userList: null,
     }))
 
-    console.log(events)
-
     return commit('setGroupEvents', { groupId, events })
   },
   async fetchEvent({ commit }, { groupId, eventId }) {
     // Fetch event attendance
     const users = await api('get', '/attendance', { event_id: eventId })
-    console.log(users)
     return commit('setEventAttendance', {
       groupId,
       eventId,
@@ -231,8 +222,6 @@ const mutations = {
     const eventMap = {}
     events.forEach(event => (eventMap[event.id] = event))
     Vue.set(state[groupId], 'events', eventMap)
-    console.log('events.state')
-    console.log(state[groupId].events['1'])
   },
   setEvent(state, { groupId, eventId, event }) {
     event.eventId = eventId
@@ -243,8 +232,6 @@ const mutations = {
     const userMap = {}
     users.forEach(user => (userMap[user.fb_id] = user))
     const event = state[groupId].events[eventId]
-    console.log(event)
-    console.log(userMap)
     Vue.set(event, 'userList', userMap)
   },
   setGroup(state, { groupId, group }) {
