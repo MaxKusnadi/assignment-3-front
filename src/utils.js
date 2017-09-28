@@ -9,11 +9,23 @@ export async function api(method = 'get', path, body, json = true) {
 
   if (body != null) {
     if (method === 'get') {
-      const params = Object.entries(body)
-        .map(([key, val]) => [encodeURIComponent(key), encodeURIComponent(val)])
-        .map(([key, val]) => `${key}=${val}`)
-        .join('&')
-      path += `?${params}`
+      const params = Object.values(body)
+
+      if (params.length === 1) {
+        path += `/${params[0]}`
+      } else if (path === '/login') {
+        const query = params
+          .map(([key, val]) => [
+            encodeURIComponent(key),
+            encodeURIComponent(val),
+          ])
+          .map(([key, val]) => `${key}=${val}`)
+          .join('&')
+        path += `?${query}`
+      } else {
+        console.log(params)
+        throw new Error('GET requests should only have one parameter')
+      }
     } else {
       options.headers = { 'Content-Type': 'application/json' }
       options.body = JSON.stringify(body)
