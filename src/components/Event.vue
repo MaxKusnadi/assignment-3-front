@@ -35,21 +35,13 @@
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
-<<<<<<< HEAD
-    <v-list>
-      <v-list-group>
-        <v-list-tile slot="item">
-          <v-list-tile-action>
-            <v-icon class="indigo--text">mood</v-icon>
-=======
     <v-divider></v-divider>
     <v-list subheader>
       <v-subheader>Attendees</v-subheader>
-      <v-list-group v-for="item in items" v-bind:key="item.title">
+      <v-list-group>
         <v-list-tile slot="item">
           <v-list-tile-action>
-            <v-icon>{{ item.icon }}</v-icon>
->>>>>>> 8cfaef2eb5ee766d5665d5924af3900a448f055f
+            <v-icon>mood</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Going</v-list-tile-title>
@@ -90,7 +82,6 @@
       </v-list-group>
     </v-list>
     <div v-if='admin'>
-<<<<<<< HEAD
       <div class="buttons">
         <v-dialog class="adminbutton" v-model="dialog" persistent>
           <v-btn primary dark large slot="activator" class="notgoing">Take Attendance</v-btn>
@@ -131,41 +122,9 @@
         </v-dialog>
       </div>
     </div> 
-      
-    <div v-else>
-      <div class="buttons" v-if="status==='0'">
-        <v-btn primary dark large class="button" @click="going">Going</v-btn>
-=======
-      <v-dialog v-model="dialog" persistent>
-        <v-btn primary dark large slot="activator" class="attendance">Take Attendance</v-btn>
-        <v-card v-if='vCode==null'>
-          <v-card-text>
-            <v-text-field v-model="newCode" label="Create verification code"></v-text-field>
-            <small>*Participants have to key in this code to indicate attendance</small>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
-            <v-btn class="blue--text darken-1" flat @click.native="dialog = false" @click="submit">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-        <v-card v-else>
-          <v-card-text>
-            <div>Verification code: {{vCode}}</div>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
-            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </div>
-
     <div v-else>
       <div class="buttons" v-if="status==0">
         <v-btn success dark large class="button" @click="going">I'm Going!</v-btn>
->>>>>>> 8cfaef2eb5ee766d5665d5924af3900a448f055f
         <v-dialog class="button" v-model="dialog" persistent>
           <v-btn error dark large slot="activator" class="notgoing">Can't make it.</v-btn>
           <v-card>
@@ -179,12 +138,9 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-<<<<<<< HEAD
       </div>
       <div v-else-if="status===3" class="indicator">
         <div>Attend</div>
-=======
->>>>>>> 8cfaef2eb5ee766d5665d5924af3900a448f055f
       </div>
 
       <v-dialog v-else-if="vCode" v-model="dialog" persistent>
@@ -204,13 +160,8 @@
       </v-dialog>
 
       <div v-else class="indicator">
-<<<<<<< HEAD
-        <div v-if="status===1">I'm going</div>
-        <div v-else>Not going</div>
-=======
         <div v-if="status==1">I'm going</div>
         <div v-if="status==2">I can't make it</div>
->>>>>>> 8cfaef2eb5ee766d5665d5924af3900a448f055f
       </div>
 
     </div>
@@ -259,12 +210,6 @@ export default {
       return moment(parseInt(this.event.end_date) * 1000).format('hh:mm')
     },
     goingOnes: function() {
-<<<<<<< HEAD
-      console.log(this.event.userList)
-      console.log(Object.values(this.event.userList).filter(
-        user => user.status === 3))
-=======
->>>>>>> 8cfaef2eb5ee766d5665d5924af3900a448f055f
       if (this.event.userList == null) return []
       return Object.values(this.event.userList).filter(
         user => user.status === 3

@@ -16,7 +16,7 @@ const actions = {
 
     // Fetch group info
     const groupInfos = await Promise.all(
-      groupIds.map(group => api('get', '/group', { group_id: group.group_id }))
+      groupIds.map(group => api('get', `/group/${group.group_Id}`))
     )
 
     const groups = groupInfos.map((info, i) => ({
@@ -28,10 +28,10 @@ const actions = {
   },
   async joinGroup({ commit }, { groupId }) {
     // Join group
-    api('post', '/me/group', { group_id: groupId })
+    api('get', `/join/group/${groupId}`)
 
     // Fetch group info
-    const group = await api('get', '/group', { group_id: groupId })
+    const group = await api('get', `/group/${groupId}`)
 
     commit('setGroup', { groupId, group })
   },
@@ -43,21 +43,20 @@ const actions = {
   },
   async createGroup({ commit }, { name, description, picUrl }) {
     // Create group
-    const { group_id } = await api('post', '/group', {
+    const { groupId } = await api('post', '/group', {
       name,
       description,
       pic_url: picUrl,
     })
-
     // Fetch group info
-    const group = await api('get', '/group', { group_id })
+    const group = await api('get', `/group/${groupId}`)
 
-    commit('setGroup', { groupId: group_id, group })
+    commit('setGroup', { groupId, group })
   },
   deleteGroup({ commit }, { groupId }) {
     // TODO: check if user is owner of group
     // Delete group
-    api('delete', '/group', { group_id: groupId })
+    api('delete', `/group/${groupId}`)
 
     commit('removeGroup', { groupId })
   },
@@ -100,7 +99,7 @@ const actions = {
         alert = 60 * 24
     }
 
-    const { event_id } = await api('post', '/event', {
+    const { eventId } = await api('post', '/event', {
       start_date: startDateTime / 1000,
       group_id: groupId,
       name,
@@ -111,12 +110,12 @@ const actions = {
     })
 
     // Fetch group info
-    const event = await api('get', '/event', { event_id })
+    const event = await api('get', `/event/${eventId}`)
 
-    commit('setEvent', { groupId, eventId: event_id, event })
+    commit('setEvent', { groupId, eventId, event })
     commit('setEventAttendance', {
       groupId,
-      eventId: event_id,
+      eventId,
       users: null,
     })
   },
@@ -126,7 +125,7 @@ const actions = {
 
     // Fetch event info
     const eventInfos = await Promise.all(
-      eventIds.map(event => api('get', '/event', { event_id: event.event_id }))
+      eventIds.map(event => api('get', `/event/${event.event_id}`))
     )
     const events = eventInfos.map((info, i) => ({
       id: eventIds[i].event_id,
@@ -138,7 +137,7 @@ const actions = {
   },
   async fetchEvent({ commit }, { groupId, eventId }) {
     // Fetch event attendance
-    const users = await api('get', '/attendance', { event_id: eventId })
+    const users = await api('get', `/attendance/${eventId}`)
     return commit('setEventAttendance', {
       groupId,
       eventId,
@@ -147,9 +146,10 @@ const actions = {
   },
   async deleteEvent({ commit }, { groupId, eventId }) {
     api('delete', '/event', { event_id: eventId })
-    const eventIds = await api('get', '/group/event', { group_id: groupId })
+    const eventIds = await api('get', `/group/${groupId}/event`)
+    // Fetch event info
     const eventInfos = await Promise.all(
-      eventIds.map(event => api('get', '/event', { event_id: event.event_id }))
+      eventIds.map(event => api('get', `/event/${event.event_id}`))
     )
     const events = eventInfos.map((info, i) => ({
       id: eventIds[i].event_id,
@@ -163,27 +163,27 @@ const actions = {
   },
   async createVcode({ commit }, { groupId, eventId, vCode }) {
     // Create group
-    const { event_id } = await api('PATCH', '/event', {
+    await api('PATCH', '/event', {
       event_id: eventId,
       verification_code: vCode,
     })
 
     // Fetch group info
-    const event = await api('get', '/event', { event_id })
-    const users = await api('get', '/attendance', { event_id: eventId })
+    const event = await api('get', `/event/${eventId}`)
+    const users = await api('get', `/attendance/${eventId}`)
 
-    commit('setEvent', { groupId, eventId: event_id, event })
+    commit('setEvent', { groupId, eventId, event })
 
     commit('setEventAttendance', {
       groupId,
-      eventId: event_id,
+      eventId,
       users,
     })
   },
   async updateAttendance({ commit }, { groupId, eventId, status, remark }) {
     // post event attendance
     await api('post', '/attendance', { event_id: eventId, status, remark })
-    const users = await api('get', '/attendance', { event_id: eventId })
+    const users = await api('get', `/attendance${eventId}`)
     commit('setEventAttendance', {
       groupId,
       eventId,
@@ -197,7 +197,7 @@ const actions = {
       verification_code: vCode,
     })
     if (res.is_code_correct) {
-      const users = await api('get', '/attendance', { event_id: eventId })
+      const users = await api('get', `/attendance/${eventId}`)
       commit('setEventAttendance', {
         groupId,
         eventId,
