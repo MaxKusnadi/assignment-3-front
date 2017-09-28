@@ -2,10 +2,14 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/components/Index'
 import Settings from '@/components/Settings'
-import Group from '@/components/Group'
 import CreateGroup from '@/components/CreateGroup'
 import CreateEvent from '@/components/CreateEvent'
-import Event from '@/components/Event'
+
+// Split these components as they depends on `moment`
+const Event = () =>
+  import(/* webpackChunkName: 'moment' */ '@/components/Event')
+const Group = () =>
+  import(/* webpackChunkName: 'moment' */ '@/components/Group')
 
 Vue.use(Router)
 
