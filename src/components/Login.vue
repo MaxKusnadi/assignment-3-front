@@ -1,7 +1,7 @@
 <template>
   <div class="login">
-    <loader v-if="user.loggedIn == null" />
-    <v-layout v-else column wrap class="text-xs-center login">
+    <!-- <loader v-if="user.loggedIn == null" /> -->
+    <v-layout column wrap class="text-xs-center login">
       <div class="logo">
         <img alt="Golah" src="/static/img/logo.png" />
       </div>
