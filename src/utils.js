@@ -14,7 +14,7 @@ export async function api(method = 'get', path, body, json = true) {
       if (params.length === 1) {
         path += `/${params[0]}`
       } else if (path === '/login') {
-        const query = params
+        const query = Object.entries(body)
           .map(([key, val]) => [
             encodeURIComponent(key),
             encodeURIComponent(val),
