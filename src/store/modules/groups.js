@@ -37,17 +37,19 @@ const actions = {
   },
   leaveGroup({ commit }, { groupId }) {
     // Leave group
-    api('delete', '/me/group', { group_id: groupId })
+    api('DELETE', '/me/group', { group_id: groupId })
 
     commit('removeGroup', { groupId })
   },
   async createGroup({ commit }, { name, description, picUrl }) {
     // Create group
-    const { groupId } = await api('post', '/group', {
+    const { group_id } = await api('post', '/group', {
       name,
       description,
       pic_url: picUrl,
     })
+    var groupId = { group_id }.group_id
+    console.log(groupId)
     // Fetch group info
     const group = await api('get', `/group/${groupId}`)
 
@@ -56,7 +58,7 @@ const actions = {
   deleteGroup({ commit }, { groupId }) {
     // TODO: check if user is owner of group
     // Delete group
-    api('delete', `/group/${groupId}`)
+    api('DELETE', '/group', { group_id: groupId })
 
     commit('removeGroup', { groupId })
   },
@@ -99,7 +101,7 @@ const actions = {
         alert = 60 * 24
     }
 
-    const { eventId } = await api('post', '/event', {
+    const { event_id } = await api('post', '/event', {
       start_date: startDateTime / 1000,
       group_id: groupId,
       name,
@@ -108,7 +110,7 @@ const actions = {
       location,
       alert_time: alert,
     })
-
+    var eventId = { event_id }.event_id
     // Fetch group info
     const event = await api('get', `/event/${eventId}`)
 
@@ -145,7 +147,7 @@ const actions = {
     })
   },
   async deleteEvent({ commit }, { groupId, eventId }) {
-    api('delete', '/event', { event_id: eventId })
+    api('DELETE', '/event', { event_id: eventId })
     const eventIds = await api('get', `/group/${groupId}/event`)
     // Fetch event info
     const eventInfos = await Promise.all(

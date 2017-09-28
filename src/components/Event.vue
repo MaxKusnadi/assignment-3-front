@@ -307,8 +307,7 @@ export default {
   width: 100%
 
 .buttons
-  position: fixed
-  bottom: 16px
+  bottom: 20px
   width: 100%
   text-align: center
 
