@@ -5,6 +5,7 @@ import * as actions from './actions'
 import * as getters from './getters'
 import groups from './modules/groups'
 import user from './modules/user'
+import settings from './modules/settings'
 
 Vue.use(Vuex)
 
@@ -19,6 +20,7 @@ export default new Vuex.Store({
   modules: {
     user,
     groups,
+    settings,
   },
   plugins: debug ? [] : [createPersistedState()],
   strict: debug,
