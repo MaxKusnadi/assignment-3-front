@@ -6,6 +6,7 @@ import 'babel-polyfill'
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import FBSignInButton from 'vue-facebook-signin-button'
+import VueAnalytics from 'vue-analytics'
 import App from '@/App'
 import router from '@/router'
 import store from '@/store'
@@ -18,6 +19,10 @@ import Icon from 'vue-awesome/components/Icon'
 
 Vue.use(Vuetify)
 Vue.use(FBSignInButton)
+Vue.use(VueAnalytics, {
+  id: 'UA-107183657-1',
+  router,
+})
 Vue.use(Icon)
 Vue.component('icon', Icon)
 
