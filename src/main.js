@@ -50,8 +50,6 @@ window.fbAsyncInit = function() {
   FB.getLoginStatus(res => {
     if (res.status === 'connected') {
       store.dispatch('login', { accessToken: res.authResponse.accessToken })
-    } else {
-      store.dispatch('notLoggedIn')
     }
   })
 
