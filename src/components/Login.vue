@@ -54,9 +54,8 @@ export default {
 
 <style lang="stylus" scoped>
 .login
-  background-image url(/static/img/bg.webp)
-  background-size cover
-  background-position 50% 50%
+  background-image url(/static/img/bg.png)
+  background-repeat repeat
   position fixed
   left 0
   right 0
