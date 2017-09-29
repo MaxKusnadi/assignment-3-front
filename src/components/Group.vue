@@ -116,6 +116,8 @@ export default {
   position: relative
 
 .buttons
+  position: fixed
+  bottom: 16px
   width: 100%
   text-align: center
   margin-top: 30px
