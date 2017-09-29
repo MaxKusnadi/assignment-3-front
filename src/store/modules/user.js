@@ -6,7 +6,7 @@ const state = {
   lastName: null,
   email: null,
   fbId: null,
-  tut: true,
+  tut: false,
 }
 
 const getters = {}
@@ -47,7 +47,6 @@ const actions = {
   },
 
   finishTutorial({ commit }) {
-    console.log('yep im here')
     commit('setTutorial')
   },
 }
@@ -63,7 +62,7 @@ const mutations = {
     state.loggedIn = loggedIn
   },
   setTutorial(state) {
-    state.tut = false
+    state.tut = true
   },
 }
 

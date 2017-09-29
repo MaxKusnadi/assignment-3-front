@@ -66,7 +66,9 @@ export default {
   computed: {
     ...mapState({
       group(state) {
-        return state.groups[this.groupId]
+        return state.groups[this.groupId] != null
+          ? state.groups[this.groupId]
+          : { events: [] }
       },
       accent: state => state.settings.accent,
     }),

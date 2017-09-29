@@ -77,7 +77,9 @@ export default {
     },
     title() {
       const groupId = this.$route.params.groupId
-      return groupId == null ? 'Golah' : this.$store.state.groups[groupId].name
+      return groupId == null || this.$store.state.groups[groupId] == null
+        ? 'Golah'
+        : this.$store.state.groups[groupId].name
     },
   },
 
