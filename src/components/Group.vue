@@ -1,6 +1,8 @@
 <template>
   <v-container fluid>
-    <div class="elevation-2">
+    <v-card class="elevation-2">
+      <v-card-media :src="group.pic_url" height="300px">
+      </v-card-media>
       <v-list two-line subheader>
         <v-subheader>Upcoming</v-subheader>
         <v-list-tile v-for="event in upcomingEvents" :key="event.id" @click="$router.push(`/g/${groupId}/${event.id}/`)">
@@ -20,7 +22,7 @@
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
-    </div>
+    </v-card>
     <div class="button-wrapper" v-if="admin">
       <v-btn dark :class="accent" absolute fab top right @click="$router.push(`/g/${groupId}/createEvent/`)">
         <icon name="plus"></icon>
