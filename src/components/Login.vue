@@ -3,7 +3,7 @@
     <!-- <loader v-if="user.loggedIn == null" /> -->
     <v-layout column wrap class="text-xs-center login">
       <div class="logo">
-        <img alt="Golah" src="/static/img/logo.png" />
+        <img alt="Golah" src="/static/img/logo.webp" />
       </div>
       <div>
         <fb-signin-button
@@ -54,7 +54,7 @@ export default {
 
 <style lang="stylus" scoped>
 .login
-  background-image url(/static/img/bg.png)
+  background-image url(/static/img/bg.webp)
   background-repeat repeat
   position fixed
   left 0

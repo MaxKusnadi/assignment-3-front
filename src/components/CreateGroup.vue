@@ -47,7 +47,7 @@ export default {
         Authorization: 'Client-ID 8a15b5b4b5fb102',
       },
       isUploaded: false,
-      image: '/static/img/logo.png',
+      image: '/static/img/logo.webp',
       valid: false,
       name: '',
     }
