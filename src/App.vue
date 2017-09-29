@@ -20,7 +20,7 @@
       <v-snackbar :timeout="5000" success bottom v-model="isCopied">
         Link copied!
       </v-snackbar>
-      <v-menu bottom>
+      <v-menu v-model="menu" bottom left>
         <v-btn icon slot="activator">
           <v-icon>more_vert</v-icon>
         </v-btn>
@@ -64,6 +64,7 @@ export default {
       transitionName: 'back',
       dialog: false,
       isCopied: false,
+      menu: false,
     }
   },
 
