@@ -5,6 +5,7 @@ import 'babel-polyfill'
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import Vuetify from 'vuetify'
+import VueAnalytics from 'vue-analytics'
 import FBSignInButton from 'vue-facebook-signin-button'
 import VueGeolocation from 'vue-browser-geolocation'
 import App from '@/App'
@@ -19,14 +20,10 @@ import Icon from 'vue-awesome/components/Icon'
 
 Vue.use(Vuetify)
 Vue.use(FBSignInButton)
-
-// Defer
-import('vue-analytics').then(VueAnalytics =>
-  Vue.use(VueAnalytics, {
-    id: 'UA-107183657-1',
-    router,
-  })
-)
+Vue.use(VueAnalytics, {
+  id: 'UA-107183657-1',
+  router,
+})
 import('vue2-google-maps').then(VueGoogleMaps =>
   Vue.use(VueGoogleMaps, {
     load: {
