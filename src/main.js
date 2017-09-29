@@ -7,6 +7,8 @@ import Vue from 'vue'
 import Vuetify from 'vuetify'
 import FBSignInButton from 'vue-facebook-signin-button'
 import VueAnalytics from 'vue-analytics'
+import * as VueGoogleMaps from 'vue2-google-maps'
+import VueGeolocation from 'vue-browser-geolocation'
 import App from '@/App'
 import router from '@/router'
 import store from '@/store'
@@ -23,6 +25,14 @@ Vue.use(VueAnalytics, {
   id: 'UA-107183657-1',
   router,
 })
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyBvWE_sIwKbWkiuJQOf8gSk9qzpO96fhfY',
+    libraries: 'places',
+  },
+})
+Vue.use(VueGeolocation)
+
 Vue.use(Icon)
 Vue.component('icon', Icon)
 

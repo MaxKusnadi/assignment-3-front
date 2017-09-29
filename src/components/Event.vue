@@ -1,6 +1,14 @@
 <template>
   <v-card>
-    <v-card-media :src="group.pic_url || ''" alt="" height="300px">
+    <v-card-media height="300px">
+      <gmap-map
+        :center="location"
+        :zoom="12"
+        map-type-id="terrain"
+        style="width: 100%; height: 300px"
+      >
+        <gmap-marker :position="location"></gmap-marker>
+      </gmap-map>
       <v-layout column class="media">
         <v-spacer></v-spacer>
         <v-card-title class="white--text pt-5">
@@ -23,10 +31,10 @@
           <v-icon>location_on</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
-          <v-list-tile-title>{{event.location}}</v-list-tile-title>
+          <v-list-tile-title>{{locationName}}</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
-      <v-list-tile tag="div" :ripple="false">
+      <v-list-tile v-if="event.description != ''" tag="div" :ripple="false">
         <v-list-tile-action>
           <v-icon>description</v-icon>
         </v-list-tile-action>
@@ -115,8 +123,8 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn class="blue--text darken-1" flat @click.native="dialog2 = false" @click="deleteEvent">Yes</v-btn>
               <v-btn class="blue--text darken-1" flat @click.native="dialog2 = false">Cancel</v-btn>
+              <v-btn error @click.native="dialog2 = false" @click="deleteEvent">Delete</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -198,6 +206,20 @@ export default {
     event: function() {
       return this.group.events[this.eventId]
     },
+    locationName: function() {
+      try {
+        return JSON.parse(this.event.location).name
+      } catch (e) {
+        return this.event.location
+      }
+    },
+    location: function() {
+      try {
+        return JSON.parse(this.event.location).coords
+      } catch (e) {
+        return { lat: 0, lng: 0 }
+      }
+    },
     startDate: function() {
       return moment(parseInt(this.event.start_date) * 1000).format(
         'dddd, DD MMMM'
@@ -253,14 +275,18 @@ export default {
 
   methods: {
     verify() {
-      this.$store.dispatch('takeAttendance', {
-        groupId: this.groupId,
-        eventId: this.eventId,
-        vCode: this.newCode,
-        }).then(response => {
-          console.log("Got some data, now lets show something in this component")
+      this.$store
+        .dispatch('takeAttendance', {
+          groupId: this.groupId,
+          eventId: this.eventId,
+          vCode: this.newCode,
+        })
+        .then(response => {
+          console.log(
+            'Got some data, now lets show something in this component'
+          )
           console.log(response)
-          if (response.toString() === "true") {
+          if (response.toString() === 'true') {
             console.log(response)
             this.dialog = false
           } else {
@@ -268,7 +294,7 @@ export default {
             this.dialog = true
             this.wrongCode = true
           }
-      })
+        })
     },
     submit() {
       this.$store.dispatch('createVcode', {
@@ -295,8 +321,11 @@ export default {
     },
 
     deleteEvent() {
-      this.$store.dispatch('deleteEvent', { groupId: this.groupId, eventId: this.eventId })
-      this.$router.push('/')
+      this.$store.dispatch('deleteEvent', {
+        groupId: this.groupId,
+        eventId: this.eventId,
+      })
+      this.$router.push(`/g/${this.groupId}`)
     },
   },
 }
@@ -348,4 +377,7 @@ export default {
 .media
   height: 100%
   margin: 0
+
+.vue-map-container
+  position: absolute
 </style>

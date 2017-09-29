@@ -17,7 +17,7 @@
               v-model="modal1"
               lazy
               full-width
-            >  
+            >
               <v-text-field
                 slot="activator"
                 label="Start Date"
@@ -35,7 +35,7 @@
               </v-date-picker>
             </v-dialog>
           </v-flex>
-        
+
           <v-flex xs6 sm6 class="datetime">
             <v-dialog
               persistent
@@ -60,14 +60,14 @@
             </v-dialog>
           </v-flex>
           <v-flex xs6 sm6 class="datetime">
-        
+
             <v-dialog
               persistent
               v-model="modal3"
               lazy
               full-width
             >
-          
+
               <v-text-field
                 slot="activator"
                 label="End Date"
@@ -85,7 +85,7 @@
               </v-date-picker>
             </v-dialog>
           </v-flex>
-        
+
           <v-flex xs6 sm6 class="datetime">
             <v-dialog
               persistent
@@ -112,11 +112,25 @@
           <v-flex xs12 sm12 class='textinput'>
             <v-text-field
               label="Location"
-              v-model="location"
+              v-model="locationName"
               prepend-icon="location_on"
               :counter="true"
             ></v-text-field>
           </v-flex>
+          <gmap-map
+            :center="currentLocation"
+            :zoom="12"
+            map-type-id="terrain"
+            style="width: 500px; height: 300px"
+          >
+            <gmap-marker
+              :position="location"
+              @position_changed="updateLocation"
+              :clickable="true"
+              :draggable="true"
+              @click="center=location"
+            ></gmap-marker>
+          </gmap-map>
           <v-flex xs12 sm12 class='textinput'>
             <v-select
               v-bind:items="states"
@@ -144,25 +158,33 @@
       </div>
     </form>
   </v-container>
-</template> 
+</template>
 
 <script>
 import AvatarCropper from 'vue-avatar-cropper'
+import moment from 'moment'
 
 export default {
+  async mounted() {
+    this.location = await this.$getLocation()
+    this.currentLocation = this.location
+  },
+
   data() {
     return {
       valid: false,
       eventName: '',
-      startDate: null,
-      startTime: null,
-      endDate: null,
-      endTime: null,
+      startDate: moment().format('YYYY-MM-DD'),
+      startTime: moment().format('hh:mm'),
+      endDate: moment().format('YYYY-MM-DD'),
+      endTime: moment().format('hh:mm'),
       modal1: false,
       modal2: false,
       modal3: false,
       modal4: false,
-      location: '',
+      locationName: '',
+      currentLocation: { lat: 0, lng: 0 },
+      location: { lat: 0, lng: 0 },
       alert: null,
       states: ['10 minutes', '30 minutes', '1 hour', '2 hours', '1 day'],
       description: '',
@@ -182,9 +204,18 @@ export default {
         endDate: this.endDate,
         endTime: this.endTime,
         description: this.description,
-        location: this.location,
+        location: JSON.stringify({
+          name: this.locationName,
+          coords: this.location,
+        }),
       })
       this.$router.push(`/g/${this.groupId}/`)
+    },
+    updateLocation(position) {
+      this.location = {
+        lat: position.lat(),
+        lng: position.lng(),
+      }
     },
   },
 

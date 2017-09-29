@@ -76,7 +76,16 @@ export default {
       return Object.keys(this.$store.state.groups).length !== 0
     },
     title() {
+      const eventId = this.$route.params.eventId
       const groupId = this.$route.params.groupId
+      if (
+        eventId != null &&
+        groupId != null &&
+        this.$store.state.groups[groupId] != null &&
+        this.$store.state.groups[groupId].events[eventId] != null
+      ) {
+        return this.$store.state.groups[groupId].events[eventId].name
+      }
       return groupId == null || this.$store.state.groups[groupId] == null
         ? 'Golah'
         : this.$store.state.groups[groupId].name

@@ -43,13 +43,11 @@ const actions = {
   },
   async createGroup({ commit }, { name, description, picUrl }) {
     // Create group
-    const { group_id } = await api('post', '/group', {
+    const { group_id: groupId } = await api('post', '/group', {
       name,
       description,
       pic_url: picUrl,
     })
-    var groupId = { group_id }.group_id
-    console.log(groupId)
     // Fetch group info
     const group = await api('get', `/group/${groupId}`)
 
@@ -101,7 +99,7 @@ const actions = {
         alert = 60 * 24
     }
 
-    const { event_id } = await api('post', '/event', {
+    const { event_id: eventId } = await api('post', '/event', {
       start_date: startDateTime / 1000,
       group_id: groupId,
       name,
@@ -110,7 +108,6 @@ const actions = {
       location,
       alert_time: alert,
     })
-    var eventId = { event_id }.event_id
     // Fetch group info
     const event = await api('get', `/event/${eventId}`)
 
@@ -118,7 +115,7 @@ const actions = {
     commit('setEventAttendance', {
       groupId,
       eventId,
-      users: null,
+      users: [],
     })
   },
   async fetchEvents({ commit }, { groupId }) {
@@ -147,21 +144,8 @@ const actions = {
     })
   },
   async deleteEvent({ commit }, { groupId, eventId }) {
-    api('DELETE', '/event', { event_id: eventId })
-    const eventIds = await api('get', `/group/${groupId}/event`)
-    // Fetch event info
-    const eventInfos = await Promise.all(
-      eventIds.map(event => api('get', `/event/${event.event_id}`))
-    )
-    const events = eventInfos.map((info, i) => ({
-      id: eventIds[i].event_id,
-      ...info,
-      userList: null,
-    }))
-
-    console.log(events)
-
-    return commit('setGroupEvents', { groupId, events })
+    api('delete', '/event', { event_id: eventId })
+    return commit('removeEvent', { groupId, eventId })
   },
   async createVcode({ commit }, { groupId, eventId, vCode }) {
     // Create group
@@ -260,6 +244,9 @@ const mutations = {
   },
   removeGroup(state, { groupId }) {
     delete state[groupId]
+  },
+  removeEvent(state, { groupId, eventId }) {
+    delete state[groupId].events[eventId]
   },
 }
 
