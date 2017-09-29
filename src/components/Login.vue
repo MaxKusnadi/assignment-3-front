@@ -5,6 +5,7 @@
       <div class="logo">
         <img alt="Golah" src="/static/img/logo.webp" />
       </div>
+      <span class="title">An easy way to take attendance.</span>
       <div>
         <fb-signin-button
           name="Facebook Login"
@@ -69,6 +70,8 @@ export default {
 .logo
   width 256px
   height 256px
+
+span
   margin 0 auto 32px auto
 
 .btn.btn--floating.facebook
