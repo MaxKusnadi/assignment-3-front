@@ -43,6 +43,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-btn v-if="admin" class="download" success dark large @click="download">Download Attendance Summary</v-btn>
     </div>
   </v-container>
 </template>
@@ -105,6 +106,9 @@ export default {
       this.$store.dispatch('deleteGroup', { groupId: this.groupId })
       this.$router.push('/')
     },
+    download() {
+      this.$store.dispatch('downloadAttendance', { groupId: this.groupId })
+    },
   },
 
   components: {},
@@ -137,6 +141,11 @@ export default {
 
 .delete
   width: 100%
+  margin-left: 0
+  margin-right: 0
+
+.download
+  width: 95%
   margin-left: 0
   margin-right: 0
 </style>

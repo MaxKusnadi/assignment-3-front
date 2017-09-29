@@ -212,6 +212,10 @@ const actions = {
       users,
     })
   },
+  async downloadAttendance({ commit }, { groupId }) {
+    // Fetch event attendance
+    await api('get', `/group/${groupId}/download`)
+  },
 }
 
 const mutations = {
