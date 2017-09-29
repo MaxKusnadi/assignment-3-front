@@ -84,7 +84,7 @@
     <div v-if='admin'>
       <div class="buttons">
         <v-dialog class="adminbutton" v-model="dialog" persistent>
-          <v-btn primary dark large slot="activator" class="notgoing">Take Attendance</v-btn>
+          <v-btn primary dark large slot="activator" class="takeAttendance">Take Attendance</v-btn>
           <v-card v-if='vCode==null'>
             <v-card-text>
               <v-text-field v-model="newCode" label="Create verification code"></v-text-field>
@@ -108,7 +108,7 @@
           </v-card>
         </v-dialog>
         <v-dialog class="adminbutton" v-model="dialog2" persistent>
-          <v-btn error dark large class="notgoing" slot="activator">Delete event</v-btn>
+          <v-btn error dark large class="delete" slot="activator">Delete event</v-btn>
           <v-card>
             <v-card-text>
               <div>Are you sure you want to delete this event?</div>
@@ -314,12 +314,21 @@ export default {
 .button
   width: 40%
 
-.adminbutton
-  width: 47%
-
 .notgoing
   width: 100%
   margin: 0
+
+.takeAttendance
+  position: fixed
+  bottom: 16px
+  width: 40%
+  right: 50%
+
+.delete
+  position: fixed
+  bottom: 16px
+  width: 40%
+  left: 50%
 
 .attendance
   position: fixed
