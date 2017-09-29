@@ -28,20 +28,22 @@
         <icon name="plus"></icon>
       </v-btn>
     </div>
-    <v-dialog v-model="dialog" persistent v-if="admin">
-      <v-btn error dark large class="deleteGroup" slot="activator">Delete Group</v-btn>
-      <v-card>
-        <v-card-text>
-          <div>Are you sure you want to delete this group and all the group events?</div>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Cancel</v-btn>
-          <v-btn class="blue--text darken-1" flat @click.native="dialog = false" @click="deleteGroup">Delete</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <v-btn primary dark large :class="admin ? 'attendance' : 'attendance single'" :to="`/g/${groupId}/attendance/`">Members</v-btn>
+    <div class="buttons">
+      <v-btn  :class="admin ? 'members' : 'members single'" primary dark large :to="`/g/${groupId}/attendance/`">Members</v-btn>
+      <v-dialog class="deleteGroup" v-model="dialog" persistent v-if="admin">
+        <v-btn class="delete" error dark large slot="activator">Delete Group</v-btn>
+        <v-card>
+          <v-card-text>
+            <div>Are you sure you want to delete this group and all the group events?</div>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Cancel</v-btn>
+            <v-btn class="blue--text darken-1" flat @click.native="dialog = false" @click="deleteGroup">Delete</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </v-container>
 </template>
 
@@ -113,19 +115,26 @@ export default {
 .button-wrapper
   position: relative
 
-.attendance
-  position: fixed
-  bottom: 16px
-  width: 40%
-  right: 50%
+.buttons
+  width: 100%
+  text-align: center
+  margin-top: 30px
 
-.attendance.single
+.members
+  width: 47%
+  margin-left: 0
+  margin-right: 0
+
+.members.single
   width: 80%
-  left: 10%
 
 .deleteGroup
-  position: fixed
-  bottom: 16px
-  width: 40%
-  left: 50%
+  width: 47%
+  margin-left: 0
+  margin-right: 0
+
+.delete
+  width: 100%
+  margin-left: 0
+  margin-right: 0
 </style>
