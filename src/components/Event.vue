@@ -60,7 +60,7 @@
         </v-list-tile>
         <v-list-tile v-for="user in goingOnes" v-bind:key="user.first_name">
           <v-list-tile-avatar>
-              <img :src="`//graph.facebook.com/v2.10/${user.fb_Id}/picture`" :alt="`${user.first_name}`">
+              <img :src="`//graph.facebook.com/v2.10/${user.fb_id}/picture`" :alt="`${user.first_name}`">
             </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>{{user.first_name}} {{user.last_name}}</v-list-tile-title>
@@ -81,7 +81,7 @@
         </v-list-tile>
         <v-list-tile v-for="user in notGoingOnes" v-bind:key="user.first_name">
           <v-list-tile-avatar>
-              <img :src="`//graph.facebook.com/v2.10/${user.fb_Id}/picture`" :alt="`${user.first_name}`">
+              <img :src="`//graph.facebook.com/v2.10/${user.fb_id}/picture`" :alt="`${user.first_name}`">
             </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>{{user.first_name}} {{user.last_name}}</v-list-tile-title>
@@ -102,7 +102,7 @@
         </v-list-tile>
         <v-list-tile v-for="user in attendOnes" v-bind:key="user.first_name">
           <v-list-tile-avatar>
-              <img :src="`//graph.facebook.com/v2.10/${user.fb_Id}/picture`" :alt="`${user.first_name}`">
+              <img :src="`//graph.facebook.com/v2.10/${user.fb_id}/picture`" :alt="`${user.first_name}`">
             </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>{{user.first_name}} {{user.last_name}}</v-list-tile-title>
