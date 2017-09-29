@@ -21,12 +21,12 @@
         </v-list-tile>
       </v-list>
     </div>
-    <div class="button-wrapper">
+    <div class="button-wrapper" v-if="admin">
       <v-btn dark :class="accent" absolute fab top right @click="$router.push(`/g/${groupId}/createEvent/`)">
         <icon name="plus"></icon>
       </v-btn>
     </div>
-    <v-dialog v-model="dialog" persistent>
+    <v-dialog v-model="dialog" persistent v-if="admin">
       <v-btn error dark large class="deleteGroup" slot="activator">Delete Group</v-btn>
       <v-card>
         <v-card-text>
@@ -39,7 +39,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-btn primary dark large class="attendance" :to="`/g/${groupId}/attendance/`">View Attendance</v-btn>
+    <v-btn primary dark large :class="admin ? 'attendance' : 'attendance single'" :to="`/g/${groupId}/attendance/`">Members</v-btn>
   </v-container>
 </template>
 
@@ -72,6 +72,11 @@ export default {
       },
       accent: state => state.settings.accent,
     }),
+    admin: function() {
+      var myId = this.$store.state.user.fbId
+      var creatorId = this.group.creator_fb_id
+      return myId.toString() === creatorId.toString()
+    },
     upcomingEvents: function() {
       if (this.group.events == null) return []
 
@@ -111,6 +116,10 @@ export default {
   bottom: 16px
   width: 40%
   right: 50%
+
+.attendance.single
+  width: 80%
+  left: 10%
 
 .deleteGroup
   position: fixed

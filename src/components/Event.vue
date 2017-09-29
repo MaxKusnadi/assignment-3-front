@@ -246,14 +246,7 @@ export default {
     admin: function() {
       var myId = this.$store.state.user.fbId
       var creatorId = this.group.creator_fb_id
-      console.log(myId)
-      console.log(creatorId)
-      console.log(myId.toString() === creatorId.toString())
-      if (myId.toString() === creatorId.toString()) {
-        return true
-      } else {
-        return false
-      }
+      return myId.toString() === creatorId.toString()
     },
     vCode: function() {
       if (this.admin) {
