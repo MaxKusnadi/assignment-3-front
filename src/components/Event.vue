@@ -52,7 +52,7 @@
             <v-icon class="green--text">mood</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Going</v-list-tile-title>
+            <v-list-tile-title>{{ goingOnes.length }} Going</v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-action>
             <v-icon>keyboard_arrow_down</v-icon>
@@ -73,7 +73,7 @@
             <v-icon class="red--text">mood_bad</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Not Going</v-list-tile-title>
+            <v-list-tile-title>{{ notGoingOnes.length }} Not Going</v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-action>
             <v-icon>keyboard_arrow_down</v-icon>
