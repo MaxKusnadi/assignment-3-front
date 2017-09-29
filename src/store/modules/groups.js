@@ -213,8 +213,10 @@ const actions = {
     })
   },
   async downloadAttendance({ commit }, { groupId }) {
-    // Fetch event attendance
-    await api('get', `/group/${groupId}/download`)
+    window.open(
+      `https://imgratefultoday.com:3000/group/${groupId}/download`,
+      '_blank'
+    )
   },
 }
 
