@@ -88,11 +88,33 @@
           </v-list-tile-content>
         </v-list-tile>
       </v-list-group>
+      <v-list-group v-if="vCode">
+        <v-list-tile slot="item">
+          <v-list-tile-action>
+            <v-icon class="green--text">beenhere</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Attend</v-list-tile-title>
+          </v-list-tile-content>
+          <v-list-tile-action>
+            <v-icon>keyboard_arrow_down</v-icon>
+          </v-list-tile-action>
+        </v-list-tile>
+        <v-list-tile v-for="user in attendOnes" v-bind:key="user.first_name">
+          <v-list-tile-avatar>
+              <img :src="`//graph.facebook.com/v2.10/${user.fb_Id}/picture`" :alt="`${user.first_name}`">
+            </v-list-tile-avatar>
+          <v-list-tile-content>
+            <v-list-tile-title>{{user.first_name}} {{user.last_name}}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list-group>
+      <div v-else></div>
     </v-list>
     <div v-if='admin'>
       <div class="buttons">
-        <v-dialog class="adminbutton" v-model="dialog" persistent>
-          <v-btn primary dark large slot="activator" class="takeAttendance">Take Attendance</v-btn>
+        <v-dialog class="takeAttendance" v-model="dialog" persistent>
+          <v-btn class="buttonOveride" primary dark large slot="activator">Take Attendance</v-btn>
           <v-card v-if='vCode==null'>
             <v-card-text>
               <v-text-field v-model="newCode" label="Create verification code"></v-text-field>
@@ -115,8 +137,8 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog class="adminbutton" v-model="dialog2" persistent>
-          <v-btn error dark large class="delete" slot="activator">Delete event</v-btn>
+        <v-dialog class="delete" v-model="dialog2" persistent>
+          <v-btn class="buttonOveride" error dark large slot="activator">Delete event</v-btn>
           <v-card>
             <v-card-text>
               <div>Are you sure you want to delete this event?</div>
@@ -151,8 +173,8 @@
         <div>Attend</div>
       </div>
 
-      <v-dialog v-else-if="vCode" v-model="dialog" persistent>
-        <v-btn primary dark large slot="activator" class="attendance">I'm here</v-btn>
+      <v-dialog class="here" v-else-if="vCode" v-model="dialog" persistent>
+        <v-btn primary dark large slot="activator" class="here">I'm here</v-btn>
         <v-card>
           <v-card-text>
             <v-text-field v-model="newCode" label="Enter verification code"></v-text-field>
@@ -234,13 +256,19 @@ export default {
     goingOnes: function() {
       if (this.event.userList == null) return []
       return Object.values(this.event.userList).filter(
-        user => user.status === 3
+        user => user.status === 1
       )
     },
     notGoingOnes: function() {
       if (this.event.userList == null) return []
       return Object.values(this.event.userList).filter(
         user => user.status === 2
+      )
+    },
+    attendOnes: function() {
+      if (this.event.userList == null) return []
+      return Object.values(this.event.userList).filter(
+        user => user.status === 3
       )
     },
     admin: function() {
@@ -336,30 +364,33 @@ export default {
 .button
   width: 40%
 
+.buttonOveride
+  margin: 0
+  width: 100%
+
 .notgoing
   width: 100%
   margin: 0
 
 .takeAttendance
-  position: fixed
   bottom: 16px
-  width: 40%
-  right: 50%
+  width: 47%
 
 .delete
-  position: fixed
   bottom: 16px
-  width: 40%
-  left: 50%
+  width: 47%
 
 .attendance
-  position: fixed
   bottom: 0px
   width: 50%
   margin: 0
 
+.here
+  bottom: 0px
+  width: 100%
+  margin: 0
+
 .indicator
-  position: fixed
   font-size: 20px
   text-align: center
   bottom: 0px

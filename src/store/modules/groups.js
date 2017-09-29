@@ -109,9 +109,20 @@ const actions = {
       alert_time: alert,
     })
     // Fetch group info
-    const event = await api('get', `/event/${eventId}`)
+    const eventIds = await api('get', `/group/${groupId}/event`)
 
-    commit('setEvent', { groupId, eventId, event })
+    // Fetch event info
+    const eventInfos = await Promise.all(
+      eventIds.map(event => api('get', `/event/${event.event_id}`))
+    )
+    const events = eventInfos.map((info, i) => ({
+      id: eventIds[i].event_id,
+      ...info,
+      userList: null,
+    }))
+
+    commit('setGroupEvents', { groupId, events })
+
     commit('setEventAttendance', {
       groupId,
       eventId,
@@ -149,8 +160,7 @@ const actions = {
   },
   async createVcode({ commit }, { groupId, eventId, vCode }) {
     // Create group
-    await api('PATCH', '/event', {
-      event_id: eventId,
+    await api('PATCH', `/event/${eventId}`, {
       verification_code: vCode,
     })
 
@@ -169,7 +179,7 @@ const actions = {
   async updateAttendance({ commit }, { groupId, eventId, status, remark }) {
     // post event attendance
     await api('post', '/attendance', { event_id: eventId, status, remark })
-    const users = await api('get', `/attendance${eventId}`)
+    const users = await api('get', `/attendance/${eventId}`)
     commit('setEventAttendance', {
       groupId,
       eventId,
