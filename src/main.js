@@ -19,21 +19,25 @@ import Icon from 'vue-awesome/components/Icon'
 
 Vue.use(Vuetify)
 Vue.use(FBSignInButton)
-import('vue-analytics').then(VueAnalytics =>
-  Vue.use(VueAnalytics, {
-    id: 'UA-107183657-1',
-    router,
-  })
-)
 
-import('vue2-google-maps').then(VueGoogleMaps =>
-  Vue.use(VueGoogleMaps, {
-    load: {
-      key: 'AIzaSyBvWE_sIwKbWkiuJQOf8gSk9qzpO96fhfY',
-      libraries: 'places',
-    },
-  })
-)
+// Defer
+setTimeout(15000, function() {
+  import('vue-analytics').then(VueAnalytics =>
+    Vue.use(VueAnalytics, {
+      id: 'UA-107183657-1',
+      router,
+    })
+  )
+  import('vue2-google-maps').then(VueGoogleMaps =>
+    Vue.use(VueGoogleMaps, {
+      load: {
+        key: 'AIzaSyBvWE_sIwKbWkiuJQOf8gSk9qzpO96fhfY',
+        libraries: 'places',
+      },
+    })
+  )
+})
+
 Vue.use(VueGeolocation)
 
 Vue.use(Icon)
