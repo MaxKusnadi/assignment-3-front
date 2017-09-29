@@ -6,7 +6,7 @@ const state = {
   lastName: null,
   email: null,
   fbId: null,
-  tut: false,
+  tut: true,
 }
 
 const getters = {}
@@ -62,7 +62,7 @@ const mutations = {
     state.loggedIn = loggedIn
   },
   setTutorial(state) {
-    state.tut = true
+    state.tut = false
   },
 }
 

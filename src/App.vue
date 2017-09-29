@@ -4,7 +4,7 @@
       <login />
     </v-app>
   </v-fade-transition>
-  <v-fade-transition v-else-if="!hasGroups && user.tut">
+  <v-fade-transition v-else-if="hasNoGroup && user.tut">
     <tutorial />
   </v-fade-transition>
   <v-app toolbar v-else>
@@ -72,8 +72,8 @@ export default {
       user: state => state.user,
       primary: state => state.settings.primary,
     }),
-    hasGroups() {
-      return Object.keys(this.$store.state.groups).length !== 0
+    hasNoGroup() {
+      return Object.keys(this.$store.state.groups).length === 0
     },
     title() {
       const eventId = this.$route.params.eventId
