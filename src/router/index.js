@@ -3,10 +3,16 @@ import Router from 'vue-router'
 import Index from '@/components/Index'
 import Settings from '@/components/Settings'
 import GroupAttendance from '@/components/GroupAttendance'
-import CreateGroup from '@/components/CreateGroup'
-import CreateEvent from '@/components/CreateEvent'
-import Group from '@/components/Group'
-import Event from '@/components/Event'
+
+// These components use `avatar-cropper`
+const CreateGroup = () =>
+  import(/* webpackChunkName: '1' */ '@/components/CreateGroup')
+
+// These components use `moment`
+const CreateEvent = () =>
+  import(/* webpackChunkName: '0' */ '@/components/CreateEvent')
+const Event = () => import(/* webpackChunkName: '0' */ '@/components/Event')
+const Group = () => import(/* webpackChunkName: '0' */ '@/components/Group')
 
 Vue.use(Router)
 
