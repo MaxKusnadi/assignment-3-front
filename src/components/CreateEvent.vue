@@ -161,7 +161,6 @@
 </template>
 
 <script>
-import AvatarCropper from 'vue-avatar-cropper'
 import moment from 'moment'
 
 export default {
@@ -217,10 +216,6 @@ export default {
         lng: position.lng(),
       }
     },
-  },
-
-  components: {
-    AvatarCropper,
   },
 }
 </script>

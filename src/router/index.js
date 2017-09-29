@@ -4,13 +4,15 @@ import Index from '@/components/Index'
 import Settings from '@/components/Settings'
 import GroupAttendance from '@/components/GroupAttendance'
 
-// Split these components as they depends on large third-party libraries
+// These components use `avatar-cropper`
 const CreateGroup = () =>
-  import(/* webpackChunkName: 'extra' */ '@/components/CreateGroup')
+  import(/* webpackChunkName: '1' */ '@/components/CreateGroup')
+
+// These components use `moment`
 const CreateEvent = () =>
-  import(/* webpackChunkName: 'extra' */ '@/components/CreateEvent')
-const Event = () => import(/* webpackChunkName: 'extra' */ '@/components/Event')
-const Group = () => import(/* webpackChunkName: 'extra' */ '@/components/Group')
+  import(/* webpackChunkName: '0' */ '@/components/CreateEvent')
+const Event = () => import(/* webpackChunkName: '0' */ '@/components/Event')
+const Group = () => import(/* webpackChunkName: '0' */ '@/components/Group')
 
 Vue.use(Router)
 
