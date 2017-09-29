@@ -24,7 +24,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import Loader from '@/components/Loader'
 
 export default {
   data() {
@@ -49,10 +48,6 @@ export default {
     onSignInError(err) {
       console.log(err)
     },
-  },
-
-  components: {
-    Loader,
   },
 }
 </script>
