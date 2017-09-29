@@ -58,12 +58,11 @@ window.fbAsyncInit = function() {
     xfbml: true,
     version: 'v2.10',
   })
+  FB.AppEvents.logPageView()
 
   FB.getLoginStatus(res => {
     if (res.status === 'connected') {
       store.dispatch('login', { accessToken: res.authResponse.accessToken })
     }
   })
-
-  FB.AppEvents.logPageView()
 }
