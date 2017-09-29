@@ -223,10 +223,13 @@ const actions = {
 const mutations = {
   setGroupList(state, { groups }) {
     // group: { text, name, pic_url, description }
-    Object.keys(groups).forEach(key => {
-      delete state[key]
+    groups.forEach(group => {
+      if (state[group.groupId] != null) {
+        state[group.groupId] = { ...state[group.groupId], group }
+      } else {
+        Vue.set(state, group.groupId, group)
+      }
     })
-    groups.forEach(group => Vue.set(state, group.groupId, group))
   },
   setGroupEvents(state, { groupId, events }) {
     // event: { start_date, end_date, description, location }
