@@ -12,6 +12,12 @@ const state = {
 const getters = {}
 
 const actions = {
+  logout({ commit }) {
+    if (FB == null) return
+    FB.logout()
+    api('post', '/auth/logout')
+    commit('setLoggedIn', { loggedIn: false })
+  },
   notLoggedIn({ commit }) {
     commit('setLoggedIn', { loggedIn: false })
   },
@@ -28,7 +34,7 @@ const actions = {
           user_access_token: accessToken,
         }
 
-        await api('get', '/login', payload, false)
+        await api('post', '/auth/login', payload, false)
 
         commit('setUser', {
           firstName: me.first_name,

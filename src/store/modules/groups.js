@@ -58,7 +58,7 @@ const actions = {
   deleteGroup({ commit }, { groupId }) {
     // TODO: check if user is owner of group
     // Delete group
-    api('DELETE', '/group', { group_id: groupId })
+    api('delete', '/group', { group_id: groupId })
 
     commit('removeGroup', { groupId })
   },

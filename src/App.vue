@@ -83,19 +83,14 @@ export default {
 
   methods: {
     logout() {
-      if (FB == null) return
-
-      FB.logout()
-      this.$store.dispatch('notLoggedIn')
+      this.$store.dispatch('logout')
     },
     copyLink() {
       var link = window.location.href
       var dummy = document.createElement('input')
-      console.log("createlement")
       document.body.appendChild(dummy)
       dummy.setAttribute('id', 'dummy_id')
       dummy.setAttribute('value', link)
-      console.log("setattriute")
       dummy.select()
       document.execCommand('copy')
       document.body.removeChild(dummy)

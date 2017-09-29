@@ -8,20 +8,11 @@ export async function api(method = 'get', path, body, json = true) {
   }
 
   if (body != null) {
-    if (method === 'get') {
+    if (method === 'get' || method === 'delete') {
       const params = Object.values(body)
 
       if (params.length === 1) {
         path += `/${params[0]}`
-      } else if (path === '/login') {
-        const query = Object.entries(body)
-          .map(([key, val]) => [
-            encodeURIComponent(key),
-            encodeURIComponent(val),
-          ])
-          .map(([key, val]) => `${key}=${val}`)
-          .join('&')
-        path += `?${query}`
       } else {
         console.log(params)
         throw new Error('GET requests should only have one parameter')
