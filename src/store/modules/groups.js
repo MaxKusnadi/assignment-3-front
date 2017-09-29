@@ -209,6 +209,15 @@ const actions = {
     }
     return false
   },
+
+  async fetchGroupAttendance({ commit }, { groupId }) {
+    // Fetch event attendance
+    const users = await api('get', `/group/${groupId}/attendance`)
+    return commit('setGroupAttendance', {
+      groupId,
+      users,
+    })
+  },
 }
 
 const mutations = {
@@ -241,6 +250,13 @@ const mutations = {
     group.groupId = groupId
     group.events = state[groupId] != null ? state[groupId].events : {}
     Vue.set(state, groupId, group)
+  },
+  setGroupAttendance(state, { groupId, users }) {
+    // users: [{ user_id, status }]
+    const userMap = {}
+    users.forEach(user => (userMap[user.fb_id] = user))
+    const group = state[groupId]
+    Vue.set(group, 'userList', userMap)
   },
   removeGroup(state, { groupId }) {
     delete state[groupId]

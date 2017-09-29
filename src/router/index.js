@@ -4,6 +4,7 @@ import Index from '@/components/Index'
 import Settings from '@/components/Settings'
 import CreateGroup from '@/components/CreateGroup'
 import CreateEvent from '@/components/CreateEvent'
+import GroupAttendance from '@/components/GroupAttendance'
 
 // Split these components as they depends on `moment`
 const Event = () =>
@@ -38,6 +39,13 @@ export default new Router({
       path: '/g/:groupId',
       name: 'Group',
       component: Group,
+      props: true,
+    },
+
+    {
+      path: '/g/:groupId/attendance',
+      name: 'GroupAttendance',
+      component: GroupAttendance,
       props: true,
     },
 

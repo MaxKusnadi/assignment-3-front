@@ -27,7 +27,7 @@
       </v-btn>
     </div>
     <v-dialog v-model="dialog" persistent>
-      <v-btn error dark large class="deleteGroup" slot="activator">Delete group</v-btn>
+      <v-btn error dark large class="deleteGroup" slot="activator">Delete Group</v-btn>
       <v-card>
         <v-card-text>
           <div>Are you sure you want to delete this group and all the group events?</div>
@@ -39,6 +39,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-btn primary dark large class="attendance" :to="`/g/${groupId}/attendance/`">View Attendance</v-btn>
   </v-container>
 </template>
 
@@ -103,11 +104,15 @@ export default {
 .button-wrapper
   position: relative
 
+.attendance
+  position: fixed
+  bottom: 16px
+  width: 40%
+  right: 50%
+
 .deleteGroup
   position: fixed
   bottom: 16px
-  width: 80%
-  margin: auto
-  left: 0
-  right: 0
+  width: 40%
+  left: 50%
 </style>
