@@ -47,7 +47,7 @@
     <v-divider></v-divider>
     <v-list subheader>
       <v-subheader>Attendees</v-subheader>
-      <v-list-group>
+      <v-list-group :value="true">
         <v-list-tile slot="item">
           <v-list-tile-action>
             <v-icon class="green--text">mood</v-icon>
@@ -250,14 +250,14 @@ export default {
           return {
             lat:
               tick * tick * tick * this.currentLocation.lat +
-                3 * ((1 - tick) * tick * tick) * cp1.lat +
-                3 * ((1 - tick) * (1 - tick) * tick) * cp2.lat +
-                (1 - tick) * (1 - tick) * (1 - tick) * this.location.lat,
+              3 * ((1 - tick) * tick * tick) * cp1.lat +
+              3 * ((1 - tick) * (1 - tick) * tick) * cp2.lat +
+              (1 - tick) * (1 - tick) * (1 - tick) * this.location.lat,
             lng:
               tick * tick * tick * this.currentLocation.lng +
-                3 * ((1 - tick) * tick * tick) * cp1.lng +
-                3 * ((1 - tick) * (1 - tick) * tick) * cp2.lng +
-                (1 - tick) * (1 - tick) * (1 - tick) * this.location.lng,
+              3 * ((1 - tick) * tick * tick) * cp1.lng +
+              3 * ((1 - tick) * (1 - tick) * tick) * cp2.lng +
+              (1 - tick) * (1 - tick) * (1 - tick) * this.location.lng,
           }
         })
       }
