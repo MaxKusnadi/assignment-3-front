@@ -44,7 +44,7 @@
       </v-menu>
     </v-toolbar>
     <main>
-      <transition mode="out-in" :name="transitionName">
+      <transition :name="transitionName">
         <router-view></router-view>
       </transition>
     </main>
@@ -141,19 +141,23 @@ yellow = #F8CF92
 pink = #EE90BA
 
 .container
+  position absolute
   padding 0
   max-width 1200px
 
 .forward-enter-active, .back-enter-active
-  transition all 0.15s ease-out
+  transition all .3s ease
 
 .forward-leave-active, .back-leave-active
-  transition all 0.15s ease-in
+  transition all .3s ease
+
+.forward-enter-to, .back-leave-to
+  transform translate(0, 0)
 
 .forward-enter, .back-leave-to
-  transform translate(100vw, 0)
+  transform translate(100%, 0)
 
 .back-enter, .forward-leave-to
-  transform translate(-100vw, 0)
+  transform translate(-100%, 0)
 
 </style>
