@@ -8,6 +8,7 @@
         style="width: 100%; height: 300px"
       >
         <gmap-marker :position="location"></gmap-marker>
+        <GmapPolyline v-if="curvedPath" :path="curvedPath" />
       </gmap-map>
       <v-layout column class="media">
         <v-spacer></v-spacer>
@@ -199,14 +200,17 @@
 </template>
 
 <script>
+import { range } from 'lodash'
 import moment from 'moment'
 
 export default {
-  mounted() {
+  async mounted() {
     this.$store.dispatch('fetchEvent', {
       groupId: this.groupId,
       eventId: this.eventId,
     })
+
+    this.currentLocation = await this.$getLocation()
   },
 
   data() {
@@ -216,12 +220,49 @@ export default {
       remark: null,
       wrongCode: false,
       dialog2: false,
+      currentLocation: null,
     }
   },
 
   props: ['groupId', 'eventId'],
 
   computed: {
+    curvedPath() {
+      if (this.currentLocation && this.location) {
+        return range(100).map(i => {
+          const tick = i / 99
+
+          /* Bezier curve -- set up the control points */
+          const dlat = this.location.lat - this.currentLocation.lat
+          const dlng = this.location.lng - this.currentLocation.lng
+
+          const cp1 = {
+            lat: this.currentLocation.lat + 0.33 * dlat + 0.33 * dlng,
+            lng: this.currentLocation.lng - 0.33 * dlat + 0.33 * dlng,
+          }
+
+          const cp2 = {
+            lat: this.location.lat - 0.33 * dlat + 0.33 * dlng,
+            lng: this.location.lng - 0.33 * dlat - 0.33 * dlng,
+          }
+
+          /* Bezier curve formula */
+          return {
+            lat:
+              tick * tick * tick * this.currentLocation.lat +
+                3 * ((1 - tick) * tick * tick) * cp1.lat +
+                3 * ((1 - tick) * (1 - tick) * tick) * cp2.lat +
+                (1 - tick) * (1 - tick) * (1 - tick) * this.location.lat,
+            lng:
+              tick * tick * tick * this.currentLocation.lng +
+                3 * ((1 - tick) * tick * tick) * cp1.lng +
+                3 * ((1 - tick) * (1 - tick) * tick) * cp2.lng +
+                (1 - tick) * (1 - tick) * (1 - tick) * this.location.lng,
+          }
+        })
+      }
+    },
+
     group: function() {
       return this.$store.state.groups[this.groupId]
     },
