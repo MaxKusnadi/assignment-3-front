@@ -401,8 +401,8 @@ export default {
   width: 100%
 
 .buttons
-  bottom: 20px
   width: 100%
+  padding-bottom: 8px
   text-align: center
 
 .button

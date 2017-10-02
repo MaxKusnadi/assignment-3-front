@@ -117,13 +117,13 @@ export default {
 <style lang="stylus" scoped>
 .button-wrapper
   position: relative
+  padding-bottom: 20px
 
 .buttons
-  position: fixed
-  bottom: 16px
   width: 100%
+  padding-top: 10px
+  padding-bottom: 4px
   text-align: center
-  margin-top: 30px
 
 .members
   width: 47%
