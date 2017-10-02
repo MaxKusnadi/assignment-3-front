@@ -91,7 +91,6 @@ export default {
 
   methods: {
     finish() {
-      console.log('okim here')
       this.$store.dispatch('finishTutorial')
     },
   },

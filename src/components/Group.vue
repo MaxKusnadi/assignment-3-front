@@ -1,5 +1,6 @@
 <template>
-  <v-container fluid>
+  <loader v-if="group == null" />
+  <v-container v-else fluid>
     <v-card class="elevation-2">
       <v-card-media :src="group.pic_url" height="300px">
       </v-card-media>
@@ -71,9 +72,7 @@ export default {
   computed: {
     ...mapState({
       group(state) {
-        return state.groups[this.groupId] != null
-          ? state.groups[this.groupId]
-          : { events: [] }
+        return state.groups[this.groupId]
       },
       accent: state => state.settings.accent,
     }),

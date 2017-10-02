@@ -4,7 +4,7 @@
       <login />
     </v-app>
   </v-fade-transition>
-  <v-fade-transition v-else-if="hasNoGroup && user.tut">
+  <v-fade-transition v-else-if="user.tut">
     <tutorial />
   </v-fade-transition>
   <v-app toolbar v-else>
@@ -82,14 +82,23 @@ export default {
       if (
         eventId != null &&
         groupId != null &&
+        this.$store.state.groups != null &&
         this.$store.state.groups[groupId] != null &&
+        this.$store.state.groups[groupId].events != null &&
         this.$store.state.groups[groupId].events[eventId] != null
       ) {
         return this.$store.state.groups[groupId].events[eventId].name
       }
-      return groupId == null || this.$store.state.groups[groupId] == null
-        ? 'Golah'
-        : this.$store.state.groups[groupId].name
+
+      if (
+        groupId != null &&
+        this.$store.state.groups != null &&
+        this.$store.state.groups[groupId] != null
+      ) {
+        return this.$store.state.groups[groupId].name
+      }
+
+      return 'Golah'
     },
   },
 

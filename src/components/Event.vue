@@ -1,12 +1,14 @@
 <template>
-  <v-card>
-    <v-card-media height="300px">
-      <gmap-map
+  <loader v-if="group == null || event == null" />
+  <v-container v-else fluid>
+    <v-card>
+      <v-card-media height="300px">
+        <gmap-map
         :center="location"
         :zoom="12"
         map-type-id="terrain"
         style="width: 100%; height: 300px"
-      >
+        >
         <gmap-marker :position="location"></gmap-marker>
         <GmapPolyline v-if="curvedPath" :path="curvedPath" />
       </gmap-map>
@@ -61,8 +63,8 @@
         </v-list-tile>
         <v-list-tile v-for="user in goingOnes" v-bind:key="user.first_name">
           <v-list-tile-avatar>
-              <img :src="`//graph.facebook.com/v2.10/${user.fb_id}/picture`" :alt="`${user.first_name}`">
-            </v-list-tile-avatar>
+            <img :src="`//graph.facebook.com/v2.10/${user.fb_id}/picture`" :alt="`${user.first_name}`">
+          </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>{{user.first_name}} {{user.last_name}}</v-list-tile-title>
           </v-list-tile-content>
@@ -82,8 +84,8 @@
         </v-list-tile>
         <v-list-tile v-for="user in notGoingOnes" v-bind:key="user.first_name">
           <v-list-tile-avatar>
-              <img :src="`//graph.facebook.com/v2.10/${user.fb_id}/picture`" :alt="`${user.first_name}`">
-            </v-list-tile-avatar>
+            <img :src="`//graph.facebook.com/v2.10/${user.fb_id}/picture`" :alt="`${user.first_name}`">
+          </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>{{user.first_name}} {{user.last_name}}</v-list-tile-title>
           </v-list-tile-content>
@@ -103,8 +105,8 @@
         </v-list-tile>
         <v-list-tile v-for="user in attendOnes" v-bind:key="user.first_name">
           <v-list-tile-avatar>
-              <img :src="`//graph.facebook.com/v2.10/${user.fb_id}/picture`" :alt="`${user.first_name}`">
-            </v-list-tile-avatar>
+            <img :src="`//graph.facebook.com/v2.10/${user.fb_id}/picture`" :alt="`${user.first_name}`">
+          </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>{{user.first_name}} {{user.last_name}}</v-list-tile-title>
           </v-list-tile-content>
@@ -197,6 +199,7 @@
 
     </div>
   </v-card>
+</v-container>
 </template>
 
 <script>
@@ -205,6 +208,13 @@ import moment from 'moment'
 
 export default {
   async mounted() {
+    if (
+      this.$store.state.groups == null ||
+      this.$store.state.groups[this.groupId] == null ||
+      this.$store.state.groups[this.groupId].events == null
+    ) {
+      this.$store.dispatch('fetchEvents', { groupId: this.groupId })
+    }
     this.$store.dispatch('fetchEvent', {
       groupId: this.groupId,
       eventId: this.eventId,
@@ -250,14 +260,14 @@ export default {
           return {
             lat:
               tick * tick * tick * this.currentLocation.lat +
-              3 * ((1 - tick) * tick * tick) * cp1.lat +
-              3 * ((1 - tick) * (1 - tick) * tick) * cp2.lat +
-              (1 - tick) * (1 - tick) * (1 - tick) * this.location.lat,
+                3 * ((1 - tick) * tick * tick) * cp1.lat +
+                3 * ((1 - tick) * (1 - tick) * tick) * cp2.lat +
+                (1 - tick) * (1 - tick) * (1 - tick) * this.location.lat,
             lng:
               tick * tick * tick * this.currentLocation.lng +
-              3 * ((1 - tick) * tick * tick) * cp1.lng +
-              3 * ((1 - tick) * (1 - tick) * tick) * cp2.lng +
-              (1 - tick) * (1 - tick) * (1 - tick) * this.location.lng,
+                3 * ((1 - tick) * tick * tick) * cp1.lng +
+                3 * ((1 - tick) * (1 - tick) * tick) * cp2.lng +
+                (1 - tick) * (1 - tick) * (1 - tick) * this.location.lng,
           }
         })
       }
@@ -330,7 +340,6 @@ export default {
       }
       var myId = this.$store.state.user.fbId
       var me = this.event.userList[myId]
-      console.log(me.status)
       return me.status
     },
   },
@@ -344,15 +353,9 @@ export default {
           vCode: this.newCode,
         })
         .then(response => {
-          console.log(
-            'Got some data, now lets show something in this component'
-          )
-          console.log(response)
           if (response.toString() === 'true') {
-            console.log(response)
             this.dialog = false
           } else {
-            console.log(response)
             this.dialog = true
             this.wrongCode = true
           }
