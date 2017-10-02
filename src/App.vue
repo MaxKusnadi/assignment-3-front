@@ -20,7 +20,7 @@
       <v-snackbar :timeout="5000" success bottom v-model="isCopied">
         Link copied!
       </v-snackbar>
-      <v-menu v-model="menu" bottom left>
+      <v-menu v-model="menu" bottom left style="margin-right: 8px">
         <v-btn icon slot="activator">
           <v-icon>more_vert</v-icon>
         </v-btn>
@@ -107,16 +107,27 @@ export default {
       this.$store.dispatch('logout')
     },
     copyLink() {
-      var link = window.location.href
-      var dummy = document.createElement('input')
-      document.body.appendChild(dummy)
-      dummy.setAttribute('id', 'dummy_id')
-      dummy.setAttribute('value', link)
-      dummy.select()
-      document.execCommand('copy')
-      document.body.removeChild(dummy)
+      if (navigator.share) {
+        navigator
+          .share({
+            title: this.title,
+            text: '',
+            url: window.location.href,
+          })
+          .then(() => console.log('Successful share'))
+          .catch(error => console.log('Error sharing', error))
+      } else {
+        var link = window.location.href
+        var dummy = document.createElement('input')
+        document.body.appendChild(dummy)
+        dummy.setAttribute('id', 'dummy_id')
+        dummy.setAttribute('value', link)
+        dummy.select()
+        document.execCommand('copy')
+        document.body.removeChild(dummy)
 
-      this.isCopied = true
+        this.isCopied = true
+      }
     },
   },
 
