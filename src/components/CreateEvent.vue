@@ -114,14 +114,13 @@
               label="Location"
               v-model="locationName"
               prepend-icon="location_on"
-              :counter="true"
             ></v-text-field>
           </v-flex>
           <gmap-map
             :center="currentLocation"
             :zoom="12"
             map-type-id="terrain"
-            style="width: 500px; height: 300px"
+            style="width: 100%; height: 300px"
           >
             <gmap-marker
               :position="location"
@@ -149,12 +148,12 @@
             ></v-text-field>
           </v-flex>
         </v-layout>
-        </v-container>
-      </div>
-      <div class="button-wrapper">
+        <div class="button-wrapper">
         <v-btn absolute fab top right dark class="green" @click="submit">
           <icon name="check"></icon>
         </v-btn>
+      </div>
+        </v-container>
       </div>
     </form>
   </v-container>
@@ -221,8 +220,9 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.create-group-form
-  padding: 16px
+.container
+  margin-left: 5px
+  margin-right: 15px
 
 .button-wrapper
   position: relative
