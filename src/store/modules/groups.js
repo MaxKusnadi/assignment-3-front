@@ -223,6 +223,7 @@ const actions = {
 const mutations = {
   setGroupList(state, { groups }) {
     // group: { text, name, pic_url, description }
+    state = state.filter((group, groupId) => groups[groupId] != null)
     groups.forEach(group => {
       if (state[group.groupId] != null) {
         state[group.groupId] = { ...state[group.groupId], group }
