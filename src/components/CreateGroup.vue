@@ -28,6 +28,14 @@
     ></avatar-cropper>
     <v-snackbar
       :timeout="5000"
+      error
+      bottom
+      v-model="error"
+    >
+    {{ errorMessage }}
+    </v-snackbar>
+    <v-snackbar
+      :timeout="5000"
       success
       bottom
       v-model="isUploaded"
@@ -47,9 +55,11 @@ export default {
         Authorization: 'Client-ID 8a15b5b4b5fb102',
       },
       isUploaded: false,
-      image: '/static/img/logo.webp',
+      image: '/static/img/photo.png',
       valid: false,
       name: '',
+      error: null,
+      errorMessage: '',
     }
   },
 
@@ -60,10 +70,15 @@ export default {
       this.isUploaded = true
     },
     submit() {
+      if (this.name === '') {
+        this.error = true
+        this.errorMessage = 'Your group should have a name!'
+        return false
+      }
       this.$store.dispatch('createGroup', {
         name: this.name,
         description: null,
-        picUrl: this.image,
+        picUrl: this.image === '/static/img/photo.png' ? null : this.image,
       })
       this.$router.push('/')
     },
