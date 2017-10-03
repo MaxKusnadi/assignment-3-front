@@ -4,7 +4,7 @@
     <v-card class="elevation-2">
       <v-card-media :src="group.pic_url" height="300px">
       </v-card-media>
-     
+
       <div class="eventList" v-if="!noEvent">
         <v-list two-line subheader>
           <v-subheader>Upcoming</v-subheader>
@@ -44,14 +44,14 @@
         </v-card-actions>
     </v-card>
     <div v-if="noEvent">
-      <v-btn primary dark large class="createGroup" @click="$router.push(`/g/${groupId}/createEvent/`)">Create your first event</v-btn> 
+      <v-btn primary dark large class="createGroup" @click="$router.push(`/g/${groupId}/createEvent/`)">Create your first event</v-btn>
     </div>
     <div class="button-wrapper" v-else-if="admin">
       <v-btn dark :class="accent" absolute fab top right @click="$router.push(`/g/${groupId}/createEvent/`)">
         <icon name="plus"></icon>
       </v-btn>
     </div>
-    <v-dialog class="deleteGroup" v-model="dialog2" persistent v-if="noMember">  
+    <v-dialog class="deleteGroup" v-model="dialog2" persistent v-if="noMember">
       <v-card>
         <v-card-text>
           <div>Share your group with the share button on the right top!</div>
@@ -185,4 +185,7 @@ export default {
   margin-top: 30px
   margin-left: 15%
   margin-right: 15%
+  
+.card
+  margin-bottom: 12px
 </style>
