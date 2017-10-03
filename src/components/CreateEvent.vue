@@ -1,8 +1,7 @@
 <template>
   <v-container fluid>
-    <form class="white">
+    <form class="white elevation-2">
       <div class="create-group-form">
-        <v-container grid-list-xs text-xs-center>
         <v-layout row wrap>
           <v-flex xs12 sm12 class='textinput'>
             <v-text-field
@@ -153,7 +152,6 @@
           <icon name="check"></icon>
         </v-btn>
       </div>
-        </v-container>
       </div>
     </form>
   </v-container>
@@ -220,9 +218,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.container
-  margin-left: 5px
-  margin-right: 15px
+.create-group-form
+  padding: 0 16px
 
 .button-wrapper
   position: relative

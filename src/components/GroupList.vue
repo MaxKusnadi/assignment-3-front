@@ -1,7 +1,7 @@
 <template>
   <v-container fluid grid-list-md >
     <div v-if="noGroup" class="noGroup">
-      <v-btn primary dark large class="createGroup" @click="$router.push(`/createGroup/`)">Create your first Group</v-btn> 
+      <v-btn primary dark large class="createGroup" @click="$router.push(`/createGroup/`)">Create your first Group</v-btn>
     </div>
     <div v-else>
       <v-layout row wrap>
@@ -79,4 +79,7 @@ export default {
   width: 70%
   margin-left: 15%
   margin-right: 15%
+
+.card
+  margin-bottom: 12px
 </style>

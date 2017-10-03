@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import Loader from '@/components/loader'
+import Loader from '@/components/Loader'
 import { mapState } from 'vuex'
 import moment from 'moment'
 
@@ -185,7 +185,5 @@ export default {
   margin-top: 30px
   margin-left: 15%
   margin-right: 15%
-  
-.card
-  margin-bottom: 12px
+
 </style>

@@ -203,7 +203,7 @@
 </template>
 
 <script>
-import Loader from '@/components/loader'
+import Loader from '@/components/Loader'
 import { range } from 'lodash'
 import moment from 'moment'
 
