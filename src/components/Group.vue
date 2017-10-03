@@ -139,9 +139,6 @@ export default {
 
 <style lang="stylus" scoped>
 
-.eventList
-  margin-left: 10px
-
 .button-wrapper
   position: relative
   padding-bottom: 20px
