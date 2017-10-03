@@ -223,14 +223,13 @@ const actions = {
 const mutations = {
   setGroupList(state, { groups }) {
     // group: { text, name, pic_url, description }
-    for (const groupId in Object.keys(state)) {
-      if (groups[groupId] == null) {
-        delete state[groupId]
-      }
+    const prevState = { ...state }
+    for (const groupId of Object.keys(state)) {
+      delete state[groupId]
     }
     groups.forEach(group => {
-      if (state[group.groupId] != null) {
-        state[group.groupId] = { ...state[group.groupId], group }
+      if (prevState[group.groupId] != null) {
+        Vue.set(state, group.groupId, { ...prevState[group.groupId], group })
       } else {
         Vue.set(state, group.groupId, group)
       }
