@@ -13,6 +13,7 @@
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
+      <v-btn v-if="admin" class="download" success dark large @click="download">Download Attendance Summary</v-btn>
     </div>
   </v-container>
 </template>
@@ -33,9 +34,24 @@ export default {
         return state.groups[this.groupId]
       },
     }),
+    admin: function() {
+      var myId = this.$store.state.user.fbId
+      var creatorId = this.group.creator_fb_id
+      return myId.toString() === creatorId.toString()
+    },
   },
+
+  method: {
+    download() {
+      this.$store.dispatch('downloadAttendance', { groupId: this.groupId })
+    },
+  }
 }
 </script>
 
 <style lang="stylus" scoped>
+.download
+  width: 90%
+  margin-left: 5%
+  margin-right: 5%
 </style>

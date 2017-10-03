@@ -48,7 +48,7 @@ export default {
     }),
     noGroup: function() {
       return Object.keys(this.groups).length === 0
-    }
+    },
   },
 }
 </script>
@@ -74,7 +74,6 @@ export default {
   min-height 100vh
 
 .createGroup
-  background-color: grey
   position: fixed
   top: 200px
   width: 70%
