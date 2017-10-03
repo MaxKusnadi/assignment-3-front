@@ -51,17 +51,6 @@
         <icon name="plus"></icon>
       </v-btn>
     </div>
-    <v-dialog class="deleteGroup" v-model="dialog2" persistent v-if="noMember">
-      <v-card>
-        <v-card-text>
-          <div>Share your group with the share button on the right top!</div>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn class="blue--text darken-1" flat @click.native="dialog2 = false">Got it</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </v-container>
 </template>
 
@@ -138,6 +127,15 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+
+.eventList
+  margin-left: 10px
+
+.eventList
+  margin-left: 10px
+
+.eventList
+  margin-left: 10px
 
 .button-wrapper
   position: relative

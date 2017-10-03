@@ -13,7 +13,7 @@
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
-      <v-btn v-if="admin" class="download" success dark large @click="download">Download Attendance Summary</v-btn>
+      <v-btn v-if="admin" @click="download" class="downloading" success dark large>Download Attendance Summary</v-btn>
     </div>
   </v-container>
 </template>
@@ -41,7 +41,7 @@ export default {
     },
   },
 
-  method: {
+  methods: {
     download() {
       this.$store.dispatch('downloadAttendance', { groupId: this.groupId })
     },
@@ -50,7 +50,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.download
+.downloading
   width: 90%
   margin-left: 5%
   margin-right: 5%

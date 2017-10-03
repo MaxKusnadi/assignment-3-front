@@ -11,7 +11,7 @@
           <v-divider></v-divider>
           <v-stepper-step :step="4" editable>RSVP</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step :step="5">Attend!</v-stepper-step>
+          <v-stepper-step :step="5" editable>Attend!</v-stepper-step>
         </v-stepper-header>
         <div v-show="tutorialState === 1">
           <v-card>
