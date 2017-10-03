@@ -3,25 +3,25 @@
     <div class="tutorial">
       <v-stepper v-model="tutorialState" non-linear>
         <v-stepper-header>
-          <v-stepper-step step="1" :complete="tutorialState > 1">Create Groups</v-stepper-step>
+          <v-stepper-step :step="1" editable>Create Groups</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="2" :complete="tutorialState > 2">Create Events</v-stepper-step>
+          <v-stepper-step :step="2" editable>Create Events</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="3" :complete="tutorialState > 3">Take Attendance</v-stepper-step>
+          <v-stepper-step :step="3" editable>Take Attendance</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="4" :complete="tutorialState > 4">RSVP</v-stepper-step>
+          <v-stepper-step :step="4" editable>RSVP</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step step="5">Attend!</v-stepper-step>
+          <v-stepper-step :step="5">Attend!</v-stepper-step>
         </v-stepper-header>
         <div v-show="tutorialState === 1">
           <v-card>
             <v-card-media>
               <img src="../assets/tutorial-01.png" />
             </v-card-media>
-            <v-card-actions>
+            <v-card-actions class="elevation-2">
               <v-spacer></v-spacer>
-              <v-btn flat @click.native="finish">Skip</v-btn>
-              <v-btn primary @click.native="tutorialState = 2">Got It</v-btn>
+              <v-btn flat @click.native="finish">Skip Tutorial</v-btn>
+              <v-btn primary @click.native="tutorialState = 2">Next</v-btn>
             </v-card-actions>
           </v-card>
         </div>
@@ -30,10 +30,10 @@
             <v-card-media>
               <img src="../assets/tutorial-02.png" />
             </v-card-media>
-            <v-card-actions>
+            <v-card-actions class="elevation-2">
               <v-spacer></v-spacer>
-              <v-btn flat @click.native="finish">Skip</v-btn>
-              <v-btn primary @click.native="tutorialState = 3">Got It</v-btn>
+              <v-btn flat @click.native="finish">Skip Tutorial</v-btn>
+              <v-btn primary @click.native="tutorialState = 3">Next</v-btn>
             </v-card-actions>
           </v-card>
         </div>
@@ -42,10 +42,10 @@
             <v-card-media>
               <img src="../assets/tutorial-03.png" />
             </v-card-media>
-            <v-card-actions>
+            <v-card-actions class="elevation-2">
               <v-spacer></v-spacer>
-              <v-btn flat @click.native="finish">Skip</v-btn>
-              <v-btn primary @click.native="tutorialState = 4">Got It</v-btn>
+              <v-btn flat @click.native="finish">Skip Tutorial</v-btn>
+              <v-btn primary @click.native="tutorialState = 4">Next</v-btn>
             </v-card-actions>
           </v-card>
         </div>
@@ -54,10 +54,10 @@
             <v-card-media>
               <img src="../assets/tutorial-04.png" />
             </v-card-media>
-            <v-card-actions>
+            <v-card-actions class="elevation-2">
               <v-spacer></v-spacer>
-              <v-btn flat @click.native="finish">Skip</v-btn>
-              <v-btn primary @click.native="tutorialState = 5">Got It</v-btn>
+              <v-btn flat @click.native="finish">Skip Tutorial</v-btn>
+              <v-btn primary @click.native="tutorialState = 5">Next</v-btn>
             </v-card-actions>
           </v-card>
         </div>
@@ -66,9 +66,9 @@
             <v-card-media>
               <img src="../assets/tutorial-05.png" />
             </v-card-media>
-            <v-card-actions>
+            <v-card-actions class="elevation-2">
               <v-spacer></v-spacer>
-              <v-btn primary @click.native="finish">That's all!</v-btn>
+              <v-btn primary @click.native="finish">Let's Start!</v-btn>
             </v-card-actions>
           </v-card>
         </div>
@@ -116,5 +116,9 @@ img
   bottom: 0
   left: 0
   right: 0
+
+.card__media
+  max-width: 375px
+  margin: auto
 
 </style>
