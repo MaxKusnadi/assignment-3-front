@@ -1,5 +1,5 @@
 <template>
-  <loader v-if="group == null || event == null" />
+  <loader v-if="group == null || group.events == null || event == null" />
   <v-container v-else fluid>
     <v-card>
       <v-card-media height="300px">
@@ -203,24 +203,26 @@
 </template>
 
 <script>
+import Loader from '@/components/loader'
 import { range } from 'lodash'
 import moment from 'moment'
 
 export default {
   async mounted() {
+    this.$getLocation(loc => (this.currentLocation = loc))
+
+    await this.$store.dispatch('joinGroup', { groupId: this.groupId })
     if (
       this.$store.state.groups == null ||
       this.$store.state.groups[this.groupId] == null ||
       this.$store.state.groups[this.groupId].events == null
     ) {
-      this.$store.dispatch('fetchEvents', { groupId: this.groupId })
+      await this.$store.dispatch('fetchEvents', { groupId: this.groupId })
     }
-    this.$store.dispatch('fetchEvent', {
+    await this.$store.dispatch('fetchEvent', {
       groupId: this.groupId,
       eventId: this.eventId,
     })
-
-    this.currentLocation = await this.$getLocation()
   },
 
   data() {
@@ -277,7 +279,7 @@ export default {
       return this.$store.state.groups[this.groupId]
     },
     event: function() {
-      return this.group.events[this.eventId]
+      return this.group != null && this.group.events[this.eventId]
     },
     locationName: function() {
       try {
@@ -392,6 +394,10 @@ export default {
       })
       this.$router.push(`/g/${this.groupId}`)
     },
+  },
+
+  components: {
+    Loader,
   },
 }
 </script>

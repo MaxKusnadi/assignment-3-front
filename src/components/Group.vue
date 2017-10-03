@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import Loader from '@/components/loader'
 import { mapState } from 'vuex'
 import moment from 'moment'
 
@@ -129,7 +130,9 @@ export default {
     },
   },
 
-  components: {},
+  components: {
+    Loader,
+  },
 }
 </script>
 
