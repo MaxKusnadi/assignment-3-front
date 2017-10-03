@@ -91,17 +91,18 @@ export default {
   computed: {
     ...mapState({
       group(state) {
-        return state.groups[this.groupId]
+        return state.groups != null ? state.groups[this.groupId] : null
       },
       accent: state => state.settings.accent,
     }),
     admin: function() {
+      if (this.group == null) return false
       var myId = this.$store.state.user.fbId
       var creatorId = this.group.creator_fb_id
       return myId.toString() === creatorId.toString()
     },
     noEvent: function() {
-      console.log(this.group.events)
+      if (this.group == null || this.group.events == null) return false
       return Object.keys(this.group.events).length === 0
     },
     upcomingEvents: function() {
