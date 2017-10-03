@@ -43,7 +43,7 @@
           </v-dialog>
         </v-card-actions>
     </v-card>
-    <div v-if="noEvent">
+    <div v-if="admin && noEvent">
       <v-btn primary dark large class="createGroup" @click="$router.push(`/g/${groupId}/createEvent/`)">Create your first event</v-btn>
     </div>
     <div class="button-wrapper" v-else-if="admin">
