@@ -176,9 +176,19 @@ const actions = {
       users,
     })
   },
-  async updateAttendance({ commit }, { groupId, eventId, status, remark }) {
+  async postAttendance({ commit }, { groupId, eventId, status, remark }) {
     // post event attendance
     await api('post', '/attendance', { event_id: eventId, status, remark })
+    const users = await api('get', `/attendance/${eventId}`)
+    commit('setEventAttendance', {
+      groupId,
+      eventId,
+      users,
+    })
+  },
+  async updateAttendance({ commit }, { groupId, eventId, status, remark }) {
+    // post event attendance
+    await api('PATCH', `/attendance/${eventId}`, { status, remark })
     const users = await api('get', `/attendance/${eventId}`)
     commit('setEventAttendance', {
       groupId,

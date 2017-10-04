@@ -4,7 +4,7 @@
       <login />
     </v-app>
   </v-fade-transition>
-  <v-fade-transition v-else-if="user.tut">
+  <v-fade-transition v-else-if="hasNoGroup && user.tut">
     <tutorial />
   </v-fade-transition>
   <v-app toolbar v-else>

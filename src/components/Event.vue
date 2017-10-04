@@ -176,7 +176,7 @@
         <div>Attend</div>
       </div>
 
-      <v-dialog class="here" v-else-if="vCode" v-model="dialog" persistent>
+      <v-dialog class="here" v-else-if="vCode" v-model="dialog4" persistent>
         <v-btn primary dark large slot="activator" class="here">I'm here</v-btn>
         <v-card>
           <v-card-text>
@@ -186,15 +186,28 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
+            <v-btn class="blue--text darken-1" flat @click.native="dialog4 = false">Close</v-btn>
             <v-btn class="blue--text darken-1" flat @click="verify">OK</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
-
-      <div v-else class="indicator">
-        <div v-if="status==1">I'm going</div>
-        <div v-if="status==2">I can't make it</div>
+      <div class="buttons" v-else-if="status==1">
+        <v-dialog class="notgoing" v-model="dialog3" persistent>
+          <v-btn error dark large slot="activator" class="notgoing">Change of Plan: Can't make it.</v-btn>
+          <v-card>
+            <v-card-text>
+              <v-text-field v-model="remark" label="Remark"></v-text-field>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn class="blue--text darken-1" flat @click.native="dialog3 = false">Cancel</v-btn>
+              <v-btn class="blue--text darken-1" flat @click.native="dialog3 = false" @click="changeNotGoing">OK</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </div>
+      <div class="buttons" v-else-if="status==2">
+        <v-btn success dark large class="notgoing" @click="changeGoing">Change of Plan: I'm Going!</v-btn>
       </div>
 
     </div>
@@ -232,7 +245,9 @@ export default {
       remark: null,
       wrongCode: false,
       dialog2: false,
+      dialog3: false,
       currentLocation: null,
+      dialog4: false,
     }
   },
 
@@ -356,9 +371,9 @@ export default {
         })
         .then(response => {
           if (response.toString() === 'true') {
-            this.dialog = false
+            this.dialog4 = false
           } else {
-            this.dialog = true
+            this.dialog4 = true
             this.wrongCode = true
           }
         })
@@ -371,6 +386,14 @@ export default {
       })
     },
     going() {
+      this.$store.dispatch('postAttendance', {
+        groupId: this.groupId,
+        eventId: this.eventId,
+        status: 1,
+        remark: null,
+      })
+    },
+    changeGoing() {
       this.$store.dispatch('updateAttendance', {
         groupId: this.groupId,
         eventId: this.eventId,
@@ -379,6 +402,14 @@ export default {
       })
     },
     notGoing() {
+      this.$store.dispatch('postAttendance', {
+        groupId: this.groupId,
+        eventId: this.eventId,
+        status: 2,
+        remark: this.remark,
+      })
+    },
+    changeNotGoing() {
       this.$store.dispatch('updateAttendance', {
         groupId: this.groupId,
         eventId: this.eventId,
