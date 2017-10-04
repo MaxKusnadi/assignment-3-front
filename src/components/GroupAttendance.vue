@@ -9,7 +9,7 @@
           </v-list-tile-avatar>
           <v-list-tile-content>
             <v-list-tile-title>{{ user.first_name }} {{ user.last_name }}</v-list-tile-title>
-            <v-list-tile-sub-title>Attended: {{ user.going }}/{{ Object.keys(group.events).length }}</v-list-tile-sub-title>
+            <v-list-tile-sub-title>Attended {{ user.confirmed }} / Indicated {{ user.going + user.confirmed }} / Absent {{ Object.keys(group.events).length - user.confirmed - user.going }}</v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
