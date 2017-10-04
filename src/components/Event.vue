@@ -49,13 +49,34 @@
     <v-divider></v-divider>
     <v-list subheader>
       <v-subheader>Attendees</v-subheader>
+      <v-list-group v-if="vCode">
+        <v-list-tile slot="item">
+          <v-list-tile-action>
+            <v-icon class="green--text">beenhere</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>{{ attendOnes.length }} Here</v-list-tile-title>
+          </v-list-tile-content>
+          <v-list-tile-action>
+            <v-icon>keyboard_arrow_down</v-icon>
+          </v-list-tile-action>
+        </v-list-tile>
+        <v-list-tile v-for="user in attendOnes" v-bind:key="user.first_name">
+          <v-list-tile-avatar>
+            <img :src="`//graph.facebook.com/v2.10/${user.fb_id}/picture`" :alt="`${user.first_name}`">
+          </v-list-tile-avatar>
+          <v-list-tile-content>
+            <v-list-tile-title>{{user.first_name}} {{user.last_name}}</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list-group>
       <v-list-group :value="true">
         <v-list-tile slot="item">
           <v-list-tile-action>
             <v-icon class="green--text">mood</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>{{ goingOnes.length }} Going</v-list-tile-title>
+            <v-list-tile-title>{{ goingOnes.length }} {{ vCode ? 'On the way' : 'Going' }}</v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-action>
             <v-icon>keyboard_arrow_down</v-icon>
@@ -76,7 +97,7 @@
             <v-icon class="red--text">mood_bad</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>{{ notGoingOnes.length }} Not Going</v-list-tile-title>
+            <v-list-tile-title>{{ notGoingOnes.length }} {{ vCode ? 'Not Coming' : 'Not Going' }}</v-list-tile-title>
           </v-list-tile-content>
           <v-list-tile-action>
             <v-icon>keyboard_arrow_down</v-icon>
@@ -91,28 +112,6 @@
           </v-list-tile-content>
         </v-list-tile>
       </v-list-group>
-      <v-list-group v-if="vCode">
-        <v-list-tile slot="item">
-          <v-list-tile-action>
-            <v-icon class="green--text">beenhere</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Attend</v-list-tile-title>
-          </v-list-tile-content>
-          <v-list-tile-action>
-            <v-icon>keyboard_arrow_down</v-icon>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-list-tile v-for="user in attendOnes" v-bind:key="user.first_name">
-          <v-list-tile-avatar>
-            <img :src="`//graph.facebook.com/v2.10/${user.fb_id}/picture`" :alt="`${user.first_name}`">
-          </v-list-tile-avatar>
-          <v-list-tile-content>
-            <v-list-tile-title>{{user.first_name}} {{user.last_name}}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list-group>
-      <div v-else></div>
     </v-list>
     <div v-if='admin'>
       <div class="buttons">
@@ -176,7 +175,7 @@
         <div>Attend</div>
       </div>
 
-      <v-dialog class="here" v-else-if="vCode" v-model="dialog4" persistent>
+      <v-dialog class="here" v-else-if="vCode" v-model="dialog" persistent>
         <v-btn primary dark large slot="activator" class="here">I'm here</v-btn>
         <v-card>
           <v-card-text>
@@ -186,28 +185,15 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="blue--text darken-1" flat @click.native="dialog4 = false">Close</v-btn>
+            <v-btn class="blue--text darken-1" flat @click.native="dialog = false">Close</v-btn>
             <v-btn class="blue--text darken-1" flat @click="verify">OK</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <div class="buttons" v-else-if="status==1">
-        <v-dialog class="notgoing" v-model="dialog3" persistent>
-          <v-btn error dark large slot="activator" class="notgoing">Change of Plan: Can't make it.</v-btn>
-          <v-card>
-            <v-card-text>
-              <v-text-field v-model="remark" label="Remark"></v-text-field>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn class="blue--text darken-1" flat @click.native="dialog3 = false">Cancel</v-btn>
-              <v-btn class="blue--text darken-1" flat @click.native="dialog3 = false" @click="changeNotGoing">OK</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </div>
-      <div class="buttons" v-else-if="status==2">
-        <v-btn success dark large class="notgoing" @click="changeGoing">Change of Plan: I'm Going!</v-btn>
+
+      <div v-else class="indicator">
+        <div v-if="status==1">I'm going</div>
+        <div v-if="status==2">I can't make it</div>
       </div>
 
     </div>
@@ -245,9 +231,7 @@ export default {
       remark: null,
       wrongCode: false,
       dialog2: false,
-      dialog3: false,
       currentLocation: null,
-      dialog4: false,
     }
   },
 
@@ -371,9 +355,9 @@ export default {
         })
         .then(response => {
           if (response.toString() === 'true') {
-            this.dialog4 = false
+            this.dialog = false
           } else {
-            this.dialog4 = true
+            this.dialog = true
             this.wrongCode = true
           }
         })
@@ -386,14 +370,6 @@ export default {
       })
     },
     going() {
-      this.$store.dispatch('postAttendance', {
-        groupId: this.groupId,
-        eventId: this.eventId,
-        status: 1,
-        remark: null,
-      })
-    },
-    changeGoing() {
       this.$store.dispatch('updateAttendance', {
         groupId: this.groupId,
         eventId: this.eventId,
@@ -402,14 +378,6 @@ export default {
       })
     },
     notGoing() {
-      this.$store.dispatch('postAttendance', {
-        groupId: this.groupId,
-        eventId: this.eventId,
-        status: 2,
-        remark: this.remark,
-      })
-    },
-    changeNotGoing() {
       this.$store.dispatch('updateAttendance', {
         groupId: this.groupId,
         eventId: this.eventId,
